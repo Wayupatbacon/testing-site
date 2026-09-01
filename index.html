@@ -41,21 +41,22 @@
   <!-- ==================== PART 1: LANDING PAGE (หน้าแรกสาธารณะ) ==================== -->
   <div id="landingPage" class="w-full">
     
-    <!-- Header Navigation -->
+    <!-- Header Navigation (อัปเดตโลโก้คู่ ซ้ายบน ตามรูปที่ 2) -->
     <header class="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <!-- รูปอาคารวงกลมข้างโลโก้ -->
-          <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
-               alt="อาคารโรงพยาบาล" 
-               class="w-10 h-10 rounded-full object-cover border border-emerald-500 shadow-sm shrink-0">
+          <!-- โลโก้คู่ (มูลนิธิฯ + KU) -->
+          <div class="flex items-center gap-2">
+            <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
+                 alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" 
+                 class="h-10 w-auto object-contain">
+            
+            <img src="https://lh3.googleusercontent.com/d/13vn2rkTYdbMkxZQTjdH8ol1PrV9UP5rh" 
+                 alt="โลโก้ ม.เกษตรศาสตร์ KU" 
+                 class="h-9 w-auto object-contain pl-1 border-l border-gray-200">
+          </div>
           
-          <!-- โลโก้มูลนิธิ -->
-          <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
-               alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" 
-               class="h-10 w-auto object-contain">
-          
-          <div class="hidden sm:block border-l border-gray-300 pl-3">
+          <div class="hidden md:block border-l border-gray-300 pl-3">
             <span class="font-extrabold text-gray-900 text-sm block leading-tight">กองทุนบริจาค</span>
             <span class="text-[11px] text-gray-500 font-medium">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</span>
           </div>
@@ -90,8 +91,11 @@
         </p>
 
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button onclick="openAuthModal('signup')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-10 py-3.5 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0">
-            ✨ ร่วมบริจาคสมทบทุน
+          <button onclick="openAuthModal('signup')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-10 py-3.5 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-2.5">
+            <span>ร่วมบริจาคสมทบทุน</span>
+            <img src="https://lh3.googleusercontent.com/d/13vn2rkTYdbMkxZQTjdH8ol1PrV9UP5rh" 
+                 alt="ไอคอนบริจาค" 
+                 class="w-5 h-5 object-cover rounded-md shrink-0">
           </button>
         </div>
       </div>
@@ -138,7 +142,7 @@
       </div>
     </section>
 
-    <!-- Section 3: ช่องทางการบริจาค (ดีไซน์รูป 2 และ 3 ข้อมูลของ ม.เกษตรศาสตร์) -->
+    <!-- Section 3: ช่องทางการบริจาค -->
     <section class="py-16 bg-white border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
@@ -194,7 +198,7 @@
                 </div>
               </details>
 
-              <!-- 03 เพิ่มเติม (ข้อมูล e-Donation & ส่งหลักฐาน) -->
+              <!-- 03 เพิ่มเติม -->
               <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200" open>
                 <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
                   <div class="flex items-center gap-4">
@@ -268,7 +272,7 @@
       </div>
     </section>
 
-    <!-- Section 5: Footer / Contact Info -->
+    <!-- Section 5: Footer / Contact Info (อัปเดตรูปกรอบมนฝั่งซ้ายเป็นโลโก้มูลนิธิฯ ตามรูปที่ 1) -->
     <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h3 class="text-xl font-bold text-white mb-8">สอบถามข้อมูลเกี่ยวกับมูลนิธิ</h3>
@@ -280,10 +284,13 @@
               📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900
             </p>
             
+            <!-- รูปโลโก้ในกรอบมนตามรูปที่ 1 -->
             <div class="pt-2">
-              <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
-                   alt="อาคารโรงพยาบาลเกษตรศาสตร์" 
-                   class="w-full max-w-sm h-36 object-cover rounded-2xl border border-slate-700 shadow-md">
+              <div class="w-full max-w-sm h-36 bg-slate-950/80 rounded-2xl border border-slate-700/80 p-4 flex items-center justify-center shadow-inner">
+                <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
+                     alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" 
+                     class="h-28 w-auto object-contain">
+              </div>
             </div>
           </div>
 
@@ -1034,7 +1041,7 @@
       } catch (err) {
         alert("เกิดข้อผิดพลาด: " + err.message);
         statusLabel.innerText = err.message;
-      } font-semibold {
+      } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = "💾 ตรวจสอบและบันทึกข้อมูลสลิป";
       }
