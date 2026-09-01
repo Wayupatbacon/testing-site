@@ -101,9 +101,9 @@
           และพัฒนาอาคารโรงพยาบาลเพื่อสังคมและสร้างโอกาศทางการศึกษาเพื่อสังคมไทย
         </p>
 
-        <!-- ปุ่มร่วมบริจาค -->
+        <!-- ปุ่มร่วมบริจาค ปรับ gap-1.5 เพื่อให้ตัวอักษรและไอคอนใกล้กันขึ้น -->
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button onclick="openAuthModal('signup')" class="w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-8 py-3 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-3">
+          <button onclick="openAuthModal('signup')" class="w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-8 py-3 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-1.5">
             <span>ร่วมบริจาคสมทบทุน</span>
             <img src="https://lh3.googleusercontent.com/d/13vn2rkTYdbMkxZQTjdH8ol1PrV9UP5rh" 
                  alt="โลโก้ KU" 
@@ -296,7 +296,6 @@
               📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900
             </p>
             
-            <!-- วาง 2 รูปตั้งคู่กันแบบไม่มีกรอบล้อมรอบ -->
             <div class="pt-2 flex items-center gap-4">
               <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
                    alt="โลโก้มหาวิทยาลัยเกษตรศาสตร์" 
@@ -413,6 +412,11 @@
         </div>
 
         <nav class="space-y-1">
+          <!-- ปุ่มร่วมบริจาคใหม่ (กดแล้วเรียก Popup) -->
+          <button onclick="openDonationModal()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl text-left bg-emerald-600 text-white hover:bg-emerald-700 shadow-md mb-3 transition">
+            💖 <span>ร่วมบริจาค (สแกน & ส่งสลิป)</span>
+          </button>
+
           <button onclick="switchTab('tab-form')" id="btn-tab-form" class="admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hover:bg-gray-50">
             📝 <span>บันทึกรายการบริจาค</span>
           </button>
@@ -691,6 +695,36 @@
     </div>
   </div>
 
+  <!-- ==================== DONATION POPUP MODAL ==================== -->
+  <div id="donationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
+    <div class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 relative text-center">
+      <!-- ปุ่มปิด Modal -->
+      <button onclick="closeDonationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold transition">✕</button>
+      
+      <h2 class="text-2xl font-extrabold text-emerald-700 mb-4">ร่วมบริจาค</h2>
+      
+      <!-- รูปภาพ QR Code / สลิป จาก Google Drive -->
+      <div class="bg-gray-50 p-2 rounded-2xl border border-gray-100 mb-4">
+        <img src="https://drive.google.com/uc?export=view&id=1HQqgI9pSjW6MuZAUuHRVmbxogr2Chr6N" 
+             alt="สแกนเพื่อร่วมบริจาค" 
+             class="mx-auto max-h-80 object-contain rounded-xl shadow-sm">
+      </div>
+      
+      <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+        เมื่อท่านทำการสแกนหรือโอนเงินเรียบร้อยแล้ว<br>
+        กรุณาส่งข้อมูลสลิปผ่านฟอร์มด้านล่างนี้
+      </p>
+      
+      <!-- ปุ่มลิงก์ไป Google Forms -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc9Rd925rRVOeYW_Su0OXHwbuEL0TuWdfqSvCJSvKaS0A8r3Q/viewform?usp=sharing&ouid=105409320723938219233" 
+         target="_blank" 
+         rel="noopener noreferrer" 
+         class="inline-block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition transform hover:-translate-y-0.5">
+        📝 ส่งข้อมูลผ่านฟอร์มนี้
+      </a>
+    </div>
+  </div>
+
   <!-- ==================== PART 5: LOGIC SCRIPT (เชื่อมต่อ Firebase & Carousel) ==================== -->
   <script>
     // CAROUSEL LOGIC
@@ -761,12 +795,11 @@
     let monthlyChartInstance = null;
     let nextTxnNumber = "TXN-000001";
 
-    // ==================== SESSION PERSISTENCE (แก้บัคหลุดล็อกอินเวลารีเฟรช) ====================
+    // ==================== SESSION PERSISTENCE ====================
     const SESSION_KEY = 'kuDonationSession';
 
     function sanitizeUserForStorage(user) {
       if (!user) return null;
-      // ไม่เก็บรหัสผ่านลง localStorage เพื่อความปลอดภัย
       const { password, ...rest } = user;
       return rest;
     }
@@ -805,8 +838,6 @@
       }
     }
 
-    // อัปเดตปุ่มมุมขวาบนของหน้าแรกให้ตรงกับสถานะล็อกอินปัจจุบันเสมอ
-    // (แยกออกมาเพื่อให้เรียกได้ทั้งตอน login ปกติ และตอน restore session เข้าแดชบอร์ดตรง ๆ)
     function syncHeaderNav() {
       if (!currentUser) return;
       document.getElementById('loginNavBtn').classList.add('hidden');
@@ -822,6 +853,15 @@
       foundationName: "มูลนิธิโรงพยาบาลเกษตรศาสตร์",
       defaultPurpose: "สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์"
     };
+
+    // Donation Popup Modal Functions
+    function openDonationModal() {
+      document.getElementById('donationModal').classList.remove('hidden');
+    }
+
+    function closeDonationModal() {
+      document.getElementById('donationModal').classList.add('hidden');
+    }
 
     function openAuthModal(mode) {
       document.getElementById('authContainer').classList.remove('hidden');
@@ -847,21 +887,14 @@
     }
     
     function processLoginSuccess() {
-      closeAuthModal(); // ปิดหน้าต่างล็อกอิน
-      
-      // สลับปุ่มมุมขวาบนหน้าแรก + อัปเดตชื่อ/ตัวย่อในปุ่มโปรไฟล์
+      closeAuthModal(); 
       syncHeaderNav();
-
-      // จำสถานะล็อกอินไว้ ป้องกันหลุดล็อกอินเมื่อรีเฟรชหน้าเว็บ
       saveSession(false);
-
-      // หมายเหตุ: เราไม่เรียก startApp() ตรงนี้แล้ว เพื่อให้ผู้ใช้ค้างอยู่หน้าแรก
     }
 
     function backToHome() {
       document.getElementById('mainAppContainer').classList.add('hidden');
       document.getElementById('landingPage').classList.remove('hidden');
-      // ยังล็อกอินอยู่ แค่ออกจากแดชบอร์ดมาหน้าแรก อัปเดต session ให้ตรงสถานะ
       if (currentUser) saveSession(false);
     }
 
@@ -870,9 +903,7 @@
       document.getElementById('authContainer').classList.add('hidden');
       document.getElementById('mainAppContainer').classList.remove('hidden');
 
-      // ให้ปุ่มมุมขวาบนของหน้าแรกตรงกับสถานะล็อกอินด้วย เผื่อผู้ใช้กด "กลับหน้าแรก" ภายหลัง
       syncHeaderNav();
-      // จำไว้ว่ากำลังอยู่ในแดชบอร์ด เพื่อกลับเข้าหน้าเดิมได้เมื่อรีเฟรช
       saveSession(true);
 
       document.getElementById('userDisplayName').innerText = currentUser.fullName;
@@ -897,9 +928,7 @@
     }
 
     function logout() {
-      // ปิดการรับข้อมูลจาก Firebase ก่อน ป้องกันการค้าง listener ซ้ำซ้อนเมื่อล็อกอินใหม่อีกครั้ง
       recordsRef.off('value');
-
       currentUser = null;
       clearSession();
 
@@ -907,7 +936,6 @@
       document.getElementById('landingPage').classList.remove('hidden');
       document.getElementById('loginForm').reset();
       
-      // รีเซ็ตปุ่มมุมขวาบนกลับเป็นค่าเริ่มต้น
       document.getElementById('loginNavBtn').classList.remove('hidden');
       document.getElementById('userProfileNavBtn').classList.add('hidden');
     }
@@ -1157,7 +1185,6 @@
     });
 
     function listenToDatabase() {
-      // เอา listener เก่าออกก่อนเสมอ ป้องกันซ้อนหลายตัวเวลาเข้าแดชบอร์ดซ้ำ (เช่น กลับหน้าแรกแล้วกดโปรไฟล์เข้าใหม่)
       recordsRef.off('value');
       recordsRef.on('value', snapshot => {
         recordsData = snapshot.val() || {};
@@ -1440,7 +1467,6 @@
       window.print();
     }
 
-    // กู้คืนสถานะล็อกอินเมื่อโหลด/รีเฟรชหน้าเว็บ (ต้องเรียกหลังประกาศฟังก์ชันที่เกี่ยวข้องทั้งหมดแล้ว)
     restoreSession();
   </script>
 </body>
