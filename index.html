@@ -761,6 +761,60 @@
     let monthlyChartInstance = null;
     let nextTxnNumber = "TXN-000001";
 
+    // ==================== SESSION PERSISTENCE (แก้บัคหลุดล็อกอินเวลารีเฟรช) ====================
+    const SESSION_KEY = 'kuDonationSession';
+
+    function sanitizeUserForStorage(user) {
+      if (!user) return null;
+      // ไม่เก็บรหัสผ่านลง localStorage เพื่อความปลอดภัย
+      const { password, ...rest } = user;
+      return rest;
+    }
+
+    function saveSession(inApp) {
+      if (!currentUser) return;
+      try {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({
+          user: sanitizeUserForStorage(currentUser),
+          inApp: !!inApp
+        }));
+      } catch (err) {
+        console.warn('ไม่สามารถบันทึก session ได้:', err);
+      }
+    }
+
+    function clearSession() {
+      try { localStorage.removeItem(SESSION_KEY); } catch (err) {}
+    }
+
+    function restoreSession() {
+      let saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem(SESSION_KEY));
+      } catch (err) {
+        saved = null;
+      }
+      if (!saved || !saved.user) return;
+
+      currentUser = saved.user;
+
+      if (saved.inApp) {
+        startApp();
+      } else {
+        processLoginSuccess();
+      }
+    }
+
+    // อัปเดตปุ่มมุมขวาบนของหน้าแรกให้ตรงกับสถานะล็อกอินปัจจุบันเสมอ
+    // (แยกออกมาเพื่อให้เรียกได้ทั้งตอน login ปกติ และตอน restore session เข้าแดชบอร์ดตรง ๆ)
+    function syncHeaderNav() {
+      if (!currentUser) return;
+      document.getElementById('loginNavBtn').classList.add('hidden');
+      document.getElementById('userProfileNavBtn').classList.remove('hidden');
+      document.getElementById('headerUserName').innerText = currentUser.fullName;
+      document.getElementById('headerUserAvatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
+    }
+
     let systemSettings = {
       receiverKeywords: "มูลนิธิโรงพยาบาลเกษตรศาสตร์, เกษตรศาสตร์, KU, โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์",
       checkDuplicate: true,
@@ -795,26 +849,31 @@
     function processLoginSuccess() {
       closeAuthModal(); // ปิดหน้าต่างล็อกอิน
       
-      // สลับปุ่มมุมขวาบนหน้าแรก
-      document.getElementById('loginNavBtn').classList.add('hidden');
-      document.getElementById('userProfileNavBtn').classList.remove('hidden');
-      
-      // อัปเดตชื่อและตัวย่อในปุ่มโปรไฟล์หน้าแรก
-      document.getElementById('headerUserName').innerText = currentUser.fullName;
-      document.getElementById('headerUserAvatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
-      
+      // สลับปุ่มมุมขวาบนหน้าแรก + อัปเดตชื่อ/ตัวย่อในปุ่มโปรไฟล์
+      syncHeaderNav();
+
+      // จำสถานะล็อกอินไว้ ป้องกันหลุดล็อกอินเมื่อรีเฟรชหน้าเว็บ
+      saveSession(false);
+
       // หมายเหตุ: เราไม่เรียก startApp() ตรงนี้แล้ว เพื่อให้ผู้ใช้ค้างอยู่หน้าแรก
     }
 
     function backToHome() {
       document.getElementById('mainAppContainer').classList.add('hidden');
       document.getElementById('landingPage').classList.remove('hidden');
+      // ยังล็อกอินอยู่ แค่ออกจากแดชบอร์ดมาหน้าแรก อัปเดต session ให้ตรงสถานะ
+      if (currentUser) saveSession(false);
     }
 
     function startApp() {
       document.getElementById('landingPage').classList.add('hidden');
       document.getElementById('authContainer').classList.add('hidden');
       document.getElementById('mainAppContainer').classList.remove('hidden');
+
+      // ให้ปุ่มมุมขวาบนของหน้าแรกตรงกับสถานะล็อกอินด้วย เผื่อผู้ใช้กด "กลับหน้าแรก" ภายหลัง
+      syncHeaderNav();
+      // จำไว้ว่ากำลังอยู่ในแดชบอร์ด เพื่อกลับเข้าหน้าเดิมได้เมื่อรีเฟรช
+      saveSession(true);
 
       document.getElementById('userDisplayName').innerText = currentUser.fullName;
       document.getElementById('userAvatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
@@ -838,7 +897,12 @@
     }
 
     function logout() {
+      // ปิดการรับข้อมูลจาก Firebase ก่อน ป้องกันการค้าง listener ซ้ำซ้อนเมื่อล็อกอินใหม่อีกครั้ง
+      recordsRef.off('value');
+
       currentUser = null;
+      clearSession();
+
       document.getElementById('mainAppContainer').classList.add('hidden');
       document.getElementById('landingPage').classList.remove('hidden');
       document.getElementById('loginForm').reset();
@@ -1093,6 +1157,8 @@
     });
 
     function listenToDatabase() {
+      // เอา listener เก่าออกก่อนเสมอ ป้องกันซ้อนหลายตัวเวลาเข้าแดชบอร์ดซ้ำ (เช่น กลับหน้าแรกแล้วกดโปรไฟล์เข้าใหม่)
+      recordsRef.off('value');
       recordsRef.on('value', snapshot => {
         recordsData = snapshot.val() || {};
         const allItems = Object.entries(recordsData).map(([key, val]) => ({ id: key, ...val }));
@@ -1373,6 +1439,9 @@
 
       window.print();
     }
+
+    // กู้คืนสถานะล็อกอินเมื่อโหลด/รีเฟรชหน้าเว็บ (ต้องเรียกหลังประกาศฟังก์ชันที่เกี่ยวข้องทั้งหมดแล้ว)
+    restoreSession();
   </script>
 </body>
 </html>
