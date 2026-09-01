@@ -67,7 +67,7 @@
       </div>
     </header>
 
-    <!-- Section 1: Minimal Hero Banner (อัปเดตข้อความใหม่ตามสั่ง) -->
+    <!-- Section 1: Minimal Hero Banner -->
     <section class="relative bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-900 py-16 md:py-24 overflow-hidden border-b border-gray-100">
       <div class="absolute inset-0 opacity-40 pointer-events-none">
         <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-emerald-100 to-teal-50 blur-3xl rounded-full"></div>
@@ -100,6 +100,16 @@
     <!-- Section 2: Auto Carousel Banner -->
     <section class="py-12 bg-white border-b">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center mb-8 space-y-2">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-emerald-600 tracking-tight">
+            ร่วมเป็นส่วนหนึ่งของการให้
+          </h2>
+          <p class="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
+            ทุกการบริจาคของคุณ คือพลังสำคัญในการสร้างโอกาสทางการรักษาและพัฒนาการศึกษาสู่สังคม
+          </p>
+        </div>
+
         <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-gray-100 group aspect-[16/9] md:aspect-[21/9] max-h-[480px]">
           <!-- Slide Container -->
           <div id="bannerCarousel" class="flex h-full transition-transform duration-700 ease-in-out">
@@ -128,27 +138,93 @@
       </div>
     </section>
 
-    <!-- Section 3: How-to & Tax Benefits -->
-    <section class="py-16 bg-slate-50">
+    <!-- Section 3: ช่องทางการบริจาค (ดีไซน์รูป 2 และ 3 ข้อมูลของ ม.เกษตรศาสตร์) -->
+    <section class="py-16 bg-white border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">
-            การบริจาคของคุณ <span class="text-emerald-600">เป็นเรื่องง่าย</span>
-          </h2>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center space-y-4 hover:shadow-md transition">
-            <div class="w-full h-48 bg-emerald-50 rounded-2xl flex items-center justify-center text-5xl">📱</div>
-            <h3 class="text-lg font-bold text-gray-900">1. ขั้นตอนวิธีการบริจาค</h3>
-            <p class="text-xs text-gray-500">โอนเงินผ่าน QR Code หรือบัญชีธนาคาร พร้อมแนบรูปสลิปเพื่อบันทึกรายการในระบบได้ทันที</p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- ฝั่งซ้าย: รูปภาพอาคารโรงพยาบาล -->
+          <div class="lg:col-span-5">
+            <div class="sticky top-24 rounded-3xl overflow-hidden shadow-xl border border-gray-100">
+              <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
+                   alt="อาคารโรงพยาบาลเกษตรศาสตร์" 
+                   class="w-full h-[420px] object-cover hover:scale-105 transition duration-500">
+            </div>
           </div>
 
-          <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center space-y-4 hover:shadow-md transition">
-            <div class="w-full h-48 bg-blue-50 rounded-2xl flex items-center justify-center text-5xl">📄</div>
-            <h3 class="text-lg font-bold text-gray-900">2. วิธีการขอคืนภาษี</h3>
-            <p class="text-xs text-gray-500">ระบบรองรับ e-Donation สามารถพิมพ์ใบรับบริจาค / ใบอนุโมทนาบัตรเพื่อใช้ลดหย่อนภาษีได้</p>
+          <!-- ฝั่งขวา: รายการช่องทางการบริจาค (Accordion) -->
+          <div class="lg:col-span-7 space-y-6">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">ช่องทางการบริจาค</h2>
+
+            <div class="space-y-4">
+              
+              <!-- 01 บริจาคผ่านบัญชีธนาคาร -->
+              <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200" open>
+                <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
+                  <div class="flex items-center gap-4">
+                    <span class="w-8 h-8 rounded-full bg-gray-600 text-white text-xs font-bold flex items-center justify-center shrink-0">01</span>
+                    <span class="text-gray-900">บริจาคผ่านบัญชีธนาคาร</span>
+                  </div>
+                  <span class="text-gray-400 group-open:rotate-180 transition-transform duration-300">▼</span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 border-t border-gray-200/50 text-xs sm:text-sm text-gray-600 space-y-3 leading-relaxed">
+                  <p class="font-semibold text-emerald-800">ชื่อบัญชี: มูลนิธิโรงพยาบาลเกษตรศาสตร์</p>
+                  <div class="bg-white p-4 rounded-xl border border-gray-200 space-y-2">
+                    <p>🏦 <strong>ธนาคารกรุงเทพ:</strong> สาขามหาวิทยาลัยเกษตรศาสตร์</p>
+                    <p>📄 <strong>ประเภทบัญชี:</strong> ออมทรัพย์</p>
+                    <p>🔢 <strong>เลขที่บัญชี:</strong> <span class="font-mono text-emerald-700 font-bold text-base">043-7-35599-9</span></p>
+                  </div>
+                  <p class="text-xs text-gray-500">* เมื่อโอนเงินเรียบร้อยแล้ว ท่านสามารถเข้าสู่ระบบเพื่ออัปโหลดสลิปและออกใบรับบริจาคได้ทันที</p>
+                </div>
+              </details>
+
+              <!-- 02 บริจาคด้วยตนเอง (Walk-in) -->
+              <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200">
+                <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
+                  <div class="flex items-center gap-4">
+                    <span class="w-8 h-8 rounded-full bg-gray-600 text-white text-xs font-bold flex items-center justify-center shrink-0">02</span>
+                    <span class="text-gray-900">บริจาคด้วยตนเอง (Walk-in)</span>
+                  </div>
+                  <span class="text-gray-400 group-open:rotate-180 transition-transform duration-300">▼</span>
+                </summary>
+                <div class="px-6 pb-6 pt-2 border-t border-gray-200/50 text-xs sm:text-sm text-gray-600 space-y-2 leading-relaxed">
+                  <p class="font-semibold text-gray-800">สำนักงานมูลนิธิโรงพยาบาลเกษตรศาสตร์</p>
+                  <p>📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900</p>
+                  <p>🕒 <strong>เวลาทำการ:</strong> วันจันทร์ - วันศุกร์ เวลา 08:30 - 16:30 น. (เว้นวันหยุดนักขัตฤกษ์)</p>
+                </div>
+              </details>
+
+              <!-- 03 เพิ่มเติม (ข้อมูล e-Donation & ส่งหลักฐาน) -->
+              <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200" open>
+                <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
+                  <div class="flex items-center gap-4">
+                    <span class="w-8 h-8 rounded-full bg-gray-600 text-white text-xs font-bold flex items-center justify-center shrink-0">03</span>
+                    <span class="text-gray-900">เพิ่มเติม</span>
+                  </div>
+                  <span class="text-gray-400 group-open:rotate-180 transition-transform duration-300">▼</span>
+                </summary>
+                <div class="px-6 pb-6 pt-4 border-t border-gray-200/50 text-xs sm:text-sm text-gray-600 space-y-4 leading-relaxed">
+                  <p>
+                    การขอรับใบเสร็จรับเงินบริจาค กรุณาส่งหลักฐานใบนำฝากธนาคาร (สลิปโอนเงิน) 
+                    พร้อม ชื่อ-สกุล, วัน/เดือน/ปีเกิด, ที่อยู่, หมายเลขโทรศัพท์ และเลขบัตรประจำตัวประชาชน 13 หลัก
+                  </p>
+
+                  <div class="space-y-1.5 font-medium text-gray-700">
+                    <p class="font-bold text-gray-900">ส่งผ่านทาง</p>
+                    <p>E-mail: <a href="mailto:office@kuhospitalfoundation.org" class="text-emerald-700 hover:underline">office@kuhospitalfoundation.org</a></p>
+                    <p>โทรศัพท์: <span class="font-mono">02-579-0113</span></p>
+                    <p>ไปรษณีย์: <strong>มูลนิธิโรงพยาบาลเกษตรศาสตร์</strong> มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพฯ 10900</p>
+                  </div>
+
+                  <p class="text-xs text-gray-500 pt-2 border-t border-gray-200/60">
+                    การบริจาคเพื่อลดหย่อนภาษี 2 เท่า ผู้บริจาคยินยอมให้เลขบัตรประจำตัวประชาชน เพื่อนำส่งระบบ e-Donation กรณีไม่สะดวกให้เลขบัตรประจำตัวประชาชน ใบเสร็จจะลดหย่อนภาษีได้ 1 เท่า
+                  </p>
+                </div>
+              </details>
+
+            </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -958,7 +1034,7 @@
       } catch (err) {
         alert("เกิดข้อผิดพลาด: " + err.message);
         statusLabel.innerText = err.message;
-      } finally {
+      } font-semibold {
         submitBtn.disabled = false;
         submitBtn.innerHTML = "💾 ตรวจสอบและบันทึกข้อมูลสลิป";
       }
