@@ -74,7 +74,7 @@
             <span id="headerUserName" class="font-medium text-sm text-emerald-800 pr-1">ชื่อผู้ใช้งาน</span>
           </button>
 
-          <button onclick="openAuthModal('signup')" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md shadow-emerald-200 transition">ร่วมบริจาค</button>
+          <button onclick="handleDonateClick()" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md transition">ร่วมบริจาค</button>
         </div>
       </div>
     </header>
@@ -103,7 +103,7 @@
 
         <!-- ปุ่มร่วมบริจาค ปรับ gap-1.5 เพื่อให้ตัวอักษรและไอคอนใกล้กันขึ้น -->
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button onclick="openAuthModal('signup')" class="w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-8 py-3 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-1.5">
+          <button onclick="handleDonateClick()" class="w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-8 py-3 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-1.5">
             <span>ร่วมบริจาคสมทบทุน</span>
             <img src="https://lh3.googleusercontent.com/d/13vn2rkTYdbMkxZQTjdH8ol1PrV9UP5rh" 
                  alt="โลโก้ KU" 
@@ -861,6 +861,18 @@
 
     function closeDonationModal() {
       document.getElementById('donationModal').classList.add('hidden');
+    }
+
+    // FIX: ปุ่ม "ร่วมบริจาค" บน landing page/header เดิมเรียก openAuthModal('signup') ตรงๆ
+    // ทำให้แม้ login แล้วก็ยังเด้งไปหน้า login/signup อยู่ดี
+    // ฟังก์ชันนี้เช็คสถานะ login ก่อน ถ้า login แล้วให้เปิด popup บริจาคทันที
+    // ถ้ายังไม่ login ค่อยเปิดหน้า signup ตามเดิม
+    function handleDonateClick() {
+      if (currentUser) {
+        openDonationModal();
+      } else {
+        openAuthModal('signup');
+      }
     }
 
     function openAuthModal(mode) {
