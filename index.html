@@ -41,13 +41,20 @@
   <!-- ==================== PART 1: LANDING PAGE (หน้าแรกสาธารณะ) ==================== -->
   <div id="landingPage" class="w-full">
     
-    <!-- Header Navigation (โลโก้ใหม่กะทัดรัด) -->
+    <!-- Header Navigation -->
     <header class="bg-white/95 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
+          <!-- รูปอาคารวงกลมข้างโลโก้ -->
+          <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
+               alt="อาคารโรงพยาบาล" 
+               class="w-10 h-10 rounded-full object-cover border border-emerald-500 shadow-sm shrink-0">
+          
+          <!-- โลโก้มูลนิธิ -->
           <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
                alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" 
                class="h-10 w-auto object-contain">
+          
           <div class="hidden sm:block border-l border-gray-300 pl-3">
             <span class="font-extrabold text-gray-900 text-sm block leading-tight">กองทุนบริจาค</span>
             <span class="text-[11px] text-gray-500 font-medium">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</span>
@@ -60,7 +67,7 @@
       </div>
     </header>
 
-    <!-- Section 1: Minimal Hero Banner -->
+    <!-- Section 1: Minimal Hero Banner (อัปเดตข้อความใหม่ตามสั่ง) -->
     <section class="relative bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-900 py-16 md:py-24 overflow-hidden border-b border-gray-100">
       <div class="absolute inset-0 opacity-40 pointer-events-none">
         <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-tr from-emerald-100 to-teal-50 blur-3xl rounded-full"></div>
@@ -69,17 +76,17 @@
       <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
         <div>
           <span class="inline-block bg-emerald-100/80 text-emerald-800 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-wide uppercase">
-            KU Hospital Foundation
+            KU HOSPITAL FOUNDATION
           </span>
           <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 tracking-tight">
-            ระบบบริหารจัดการเงินบริจาค <br>
+            ขอเชิญร่วมบริจาคเพื่อ <br>
             <span class="text-emerald-600">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</span>
           </h1>
         </div>
 
         <p class="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
           ร่วมเป็นส่วนหนึ่งในการสนับสนุนการรักษาพยาบาล จัดซื้อเครื่องมือทางการแพทย์ <br class="hidden sm:inline">
-          และพัฒนาอาคารโรงพยาบาลเพื่อสังคมและสุขภาวะที่ดีของทุกคน
+          และพัฒนาอาคารโรงพยาบาลเพื่อสังคมและสร้างโอกาศทางการศึกษาเพื่อสังคมไทย
         </p>
 
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -90,7 +97,7 @@
       </div>
     </section>
 
-    <!-- Section 2: Auto Carousel Banner (ปรับ Crop ขนาดรูปให้เท่ากันทุกรูป) -->
+    <!-- Section 2: Auto Carousel Banner -->
     <section class="py-12 bg-white border-b">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-gray-100 group aspect-[16/9] md:aspect-[21/9] max-h-[480px]">
@@ -191,11 +198,17 @@
         <h3 class="text-xl font-bold text-white mb-8">สอบถามข้อมูลเกี่ยวกับมูลนิธิ</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
-          <div class="space-y-3">
+          <div class="space-y-4">
             <h4 class="font-bold text-emerald-400 text-base">มูลนิธิโรงพยาบาลเกษตรศาสตร์</h4>
             <p class="text-xs leading-relaxed text-slate-400">
               📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900
             </p>
+            
+            <div class="pt-2">
+              <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
+                   alt="อาคารโรงพยาบาลเกษตรศาสตร์" 
+                   class="w-full max-w-sm h-36 object-cover rounded-2xl border border-slate-700 shadow-md">
+            </div>
           </div>
 
           <div class="space-y-4">
@@ -945,7 +958,7 @@
       } catch (err) {
         alert("เกิดข้อผิดพลาด: " + err.message);
         statusLabel.innerText = err.message;
-      } font-semibold {
+      } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = "💾 ตรวจสอบและบันทึกข้อมูลสลิป";
       }
