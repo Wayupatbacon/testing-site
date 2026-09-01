@@ -1,0 +1,1050 @@
+
+!DOCTYPE html
+html lang=th
+head
+  meta charset=UTF-8
+!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free httpsnetlify.newutm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=e91742ff-ecf7-43c8-a36b-ea6ff390c543
+     Netlify hosting facts for this site staticSSR served via Netlify Edge. --
+meta name=hosting-provider content=Netlify
+meta name=netlify-deploy content=httpsnetlify.newutm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=e91742ff-ecf7-43c8-a36b-ea6ff390c543
+  meta name=viewport content=width=device-width, initial-scale=1.0
+  titleระบบบันทึกเงินบริจาค - โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์title
+  
+  !-- Tailwind CSS CDN --
+  script src=httpscdn.tailwindcss.comscript
+  !-- Chart.js CDN --
+  script src=httpscdn.jsdelivr.netnpmchart.jsscript
+  !-- Chart.js DataLabels Plugin --
+  script src=httpscdn.jsdelivr.netnpmchartjs-plugin-datalabels@2script
+  !-- Firebase SDK --
+  script src=httpswww.gstatic.comfirebasejs9.23.0firebase-app-compat.jsscript
+  script src=httpswww.gstatic.comfirebasejs9.23.0firebase-database-compat.jsscript
+  !-- Tesseract.js สำหรับ OCR สแกนสลิป --
+  script src=httpscdn.jsdelivr.netnpmtesseract.js@5disttesseract.min.jsscript
+  !-- Google Fonts Sarabun --
+  link href=httpsfonts.googleapis.comcss2family=Sarabunwght@300;400;500;600;700&display=swap rel=stylesheet
+
+  style
+    body { font-family 'Sarabun', sans-serif; }
+    #printSection { display none; }
+
+     ปรับแต่งหน้าพิมพ์สำหรับกระดาษ A4 หน้าเดียว ไม่มีข้อความส่วนเกิน 
+    @media print {
+      @page {
+        size A4 portrait;
+        margin 0;  ซ่อน HeaderFooter ของเบราว์เซอร์ 
+      }
+      body {
+        margin 0;
+        padding 0;
+        background white;
+      }
+      body  {
+        visibility hidden;
+      }
+      #printSection, #printSection  {
+        visibility visible;
+      }
+      #printSection {
+        display block !important;
+        position absolute;
+        left 0;
+        top 0;
+        width 100%;
+        margin 0;
+        padding 20mm 20mm 15mm 20mm;
+        box-sizing border-box;
+        background white;
+      }
+    }
+  style
+head
+body class=bg-gray-50 text-gray-800 min-h-screen
+
+  !-- ==================== ส่วนที่ 1 หน้าจอ Login  Sign Up ==================== --
+  div id=authContainer class=flex min-h-screen items-center justify-center p-4 bg-slate-900
+    div class=bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100
+      
+      div class=text-center mb-6
+        div class=inline-flex w-14 h-14 rounded-2xl bg-emerald-600 text-white font-bold text-2xl items-center justify-center mb-3 shadow-lg shadow-emerald-200
+          KU
+        div
+        h2 class=text-2xl font-extrabold text-slate-900ระบบกองทุนบริจาคh2
+        p class=text-xs text-slate-500 mt-1โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์p
+      div
+
+      div class=flex bg-slate-100 p-1 rounded-xl mb-6 text-sm font-medium
+        button id=tabBtnLogin onclick=switchAuthMode('login') class=w-12 py-2 rounded-lg bg-white shadow-sm text-emerald-700 font-bold transitionเข้าสู่ระบบbutton
+        button id=tabBtnSignup onclick=switchAuthMode('signup') class=w-12 py-2 rounded-lg text-slate-500 hovertext-slate-800 transitionลงทะเบียน (ผู้บริจาค)button
+      div
+
+      !-- Login Form --
+      form id=loginForm class=space-y-4
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1ชื่อผู้ใช้  อีเมลlabel
+          input type=text id=loginUsername required placeholder=เช่น piwmifp.pj@gmail.com class=w-full px-4 py-2.5 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+        div
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1รหัสผ่านlabel
+          input type=password id=loginPassword required placeholder=•••••••• class=w-full px-4 py-2.5 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+        div
+        button type=submit class=w-full bg-emerald-600 hoverbg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-emerald-60030 transition
+          🔐 เข้าสู่ระบบ
+        button
+      form
+
+      !-- Signup Form --
+      form id=signupForm class=space-y-3 hidden
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1อีเมล  Username label
+          input type=text id=signupUsername required placeholder=เช่น donor@gmail.com class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+        div
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1รหัสผ่าน label
+          input type=password id=signupPassword required minlength=6 placeholder=รหัสผ่านอย่างน้อย 6 ตัวอักษร class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+        div
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1ชื่อ-นามสกุล  ชื่อหน่วยงาน (ตรงกับที่บริจาค) label
+          input type=text id=signupFullName required placeholder=เช่น ภูวภณ สายแปลง class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+        div
+        div
+          label class=block text-xs font-semibold text-slate-700 mb-1เลขประจำตัวประชาชน  เลขผู้เสียภาษี (13 หลัก) label
+          input type=text id=signupTaxId required pattern=[0-9]{13} maxlength=13 placeholder=ตัวเลข 13 หลัก class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none font-mono title=กรุณากรอกตัวเลข 13 หลัก
+        div
+        button type=submit class=w-full bg-emerald-600 hoverbg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition mt-2
+          ✨ สมัครสมาชิกผู้บริจาค
+        button
+      form
+
+    div
+  div
+
+  !-- ==================== ส่วนที่ 2 หน้าจอหลักของระบบ (Main App) ==================== --
+  div id=mainAppContainer class=hidden min-h-screen flex flex-col mdflex-row
+
+    !-- แถบเมนูด้านซ้าย --
+    aside class=w-full mdw-64 bg-white border-r border-gray-200 p-4 shrink-0 flex flex-col justify-between
+      div
+        div class=flex items-center gap-3 px-3 py-4 border-b border-gray-100 mb-4
+          div class=w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-bold text-lgKUdiv
+          div
+            h1 class=font-bold text-gray-900 leading-tightระบบบริจาคh1
+            p class=text-xs text-gray-500ม.เกษตรศาสตร์p
+          div
+        div
+
+        nav class=space-y-1
+          button onclick=switchTab('tab-form') id=btn-tab-form class=admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hoverbg-gray-50
+            📝 spanบันทึกรายการบริจาคspan
+          button
+          button onclick=switchTab('tab-total') id=btn-tab-total class=menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left bg-emerald-50 text-emerald-700
+            📊 span id=labelTabTotalยอดรวม & รายการspan
+          button
+          button onclick=switchTab('tab-top5') id=btn-tab-top5 class=admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hoverbg-gray-50
+            🏆 span5 อันดับผู้บริจาคสูงสุดspan
+          button
+          button onclick=switchTab('tab-charts') id=btn-tab-charts class=admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hoverbg-gray-50
+            📈 spanสถิติและเปรียบเทียบspan
+          button
+          button onclick=switchTab('tab-settings') id=btn-tab-settings class=admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hoverbg-gray-50
+            ⚙️ spanตั้งค่าระบบ (Admin)span
+          button
+        nav
+      div
+
+      div class=p-3 bg-slate-50 border border-slate-200 rounded-2xl mt-6
+        div class=flex items-center gap-2 mb-2
+          div class=w-7 h-7 rounded-full bg-emerald-700 text-white text-xs flex items-center justify-center font-bold id=userAvatarUdiv
+          div class=overflow-hidden
+            p class=text-xs font-bold text-slate-800 truncate id=userDisplayNameUserp
+            p class=text-[10px] text-slate-500 uppercase tracking-wider id=userRoleBadgeRolep
+          div
+        div
+        button onclick=logout() class=w-full bg-red-50 hoverbg-red-100 text-red-600 text-xs font-semibold py-1.5 rounded-lg transition
+          🚪 ออกจากระบบ
+        button
+      div
+    aside
+
+    main class=flex-1 p-4 mdp-8 overflow-y-auto
+
+      !-- 1. แท็บฟอร์มบันทึกข้อมูล (Admin Only) --
+      section id=tab-form class=tab-content hidden space-y-6
+        div class=bg-white p-6 rounded-2xl shadow-sm border border-gray-200
+          h2 class=text-lg font-bold text-gray-800 mb-4 border-b pb-3บันทึกข้อมูลผู้บริจาคh2
+          form id=donationForm class=grid grid-cols-1 mdgrid-cols-2 gap-4
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1Transaction Ref (เลขอัตโนมัติ) label
+              input type=text id=txnRef readonly class=w-full px-3 py-2 border rounded-lg text-sm bg-gray-100 text-emerald-800 font-mono font-bold outline-none cursor-not-allowed
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1ชื่อผู้บริจาค  หน่วยงาน label
+              input type=text id=donorName required placeholder=เช่น scoobydoo class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1จำนวนเงิน (บาท) label
+              input type=number step=0.01 id=amount required placeholder=เช่น 9585.00 class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1ประเภทบุคคล label
+              select id=personType required class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none bg-white
+                option value=นิติบุคคลนิติบุคคลoption
+                option value=บุคคลธรรมดาบุคคลธรรมดาoption
+              select
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1ช่องทาง (OnlineOffline) label
+              select id=channel required class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none bg-white
+                option value=OnlineOnlineoption
+                option value=OfflineOfflineoption
+              select
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1เบอร์โทรศัพท์ (10 หลัก) label
+              input type=tel id=phoneNumber required pattern=[0-9]{10} maxlength=10 placeholder=เช่น 0812345678 class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none font-mono
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1เลขประจำตัวผู้เสียภาษี  บัตรประชาชน (13 หลัก) label
+              input type=text id=taxId required pattern=[0-9]{13} maxlength=13 placeholder=เช่น 1234567891123 class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none font-mono
+            div
+            div
+              label class=block text-xs font-semibold text-gray-600 mb-1อีเมล label
+              input type=email id=email required placeholder=เช่น donor@example.com class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+            div class=mdcol-span-2
+              label class=block text-xs font-semibold text-gray-600 mb-1อัปโหลดรูปภาพสลิปโอนเงิน (ระบบตรวจจับชื่อบัญชีผู้รับและสลิปซ้ำอัตโนมัติ) label
+              input type=file id=slipFileInput accept=image required class=w-full px-3 py-1.5 border rounded-lg text-sm bg-white filemr-4 filepy-1 filepx-3 filerounded-md fileborder-0 filetext-xs filefont-semibold filebg-emerald-50 filetext-emerald-700 hoverfilebg-emerald-100 outline-none
+              p id=slipCheckStatus class=text-xs text-gray-500 mt-1p
+            div
+            div class=mdcol-span-2
+              label class=block text-xs font-semibold text-gray-600 mb-1ที่อยู่ label
+              input type=text id=address required placeholder=เช่น 6767 ถ.งามวงศ์วาน แขวงลาดยาว เขตจตุจักร class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+            div class=mdcol-span-2
+              label class=block text-xs font-semibold text-gray-600 mb-1บริจาคเงินเพื่อ (วัตถุประสงค์ - ไม่บังคับ)label
+              input type=text id=purpose placeholder=เช่น สนับสนุนการจัดซื้อเครื่องมือแพทย์ โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์ class=w-full px-3 py-2 border rounded-lg text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+            div class=mdcol-span-2 pt-2
+              button type=submit id=submitBtn class=w-full bg-emerald-600 hoverbg-emerald-700 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition flex justify-center items-center gap-2
+                span💾 ตรวจสอบและบันทึกข้อมูลสลิปspan
+              button
+            div
+          form
+        div
+      section
+
+      !-- 2. แท็บยอดรวม & รายการ --
+      section id=tab-total class=tab-content space-y-6
+        
+        div class=grid grid-cols-1 mdgrid-cols-2 gap-4
+          div class=bg-emerald-600 text-white p-6 rounded-2xl shadow-sm flex justify-between items-center
+            div
+              p class=text-emerald-100 text-xs font-mediumยอดบริจาครวมของโครงการ (Project Total)p
+              h2 id=totalSumHeader class=text-2xl mdtext-3xl font-extrabold tracking-tight mt-10.00 บาทh2
+            div
+            span class=bg-emerald-70060 px-3 py-1 rounded-lg text-xs font-semiboldโครงการspan
+          div
+
+          div id=userPersonalCard class=bg-indigo-600 text-white p-6 rounded-2xl shadow-sm flex justify-between items-center
+            div
+              p class=text-indigo-100 text-xs font-mediumยอดบริจาครวมของฉัน (My Total Donation)p
+              h2 id=myTotalSumHeader class=text-2xl mdtext-3xl font-extrabold tracking-tight mt-10.00 บาทh2
+            div
+            span class=bg-indigo-70060 px-3 py-1 rounded-lg text-xs font-semiboldยอดของคุณspan
+          div
+        div
+
+        !-- กล่องค้นหา --
+        div class=bg-white p-4 rounded-2xl shadow-sm border border-gray-200
+          div class=relative
+            input type=text id=searchInput oninput=handleSearch() placeholder=🔍 ค้นหาด้วย ชื่อผู้บริจาค, เลขที่ REF (เช่น TXN-000088), หรือ เลขประจำตัว 13 หลัก... class=w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focusbg-white focusring-2 focusring-emerald-500 outline-none transition
+            span class=absolute left-3.5 top-3 text-gray-400🔍span
+          div
+        div
+
+        !-- ตารางข้อมูล --
+        div class=bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden
+          div class=p-4 border-b flex justify-between items-center bg-gray-50
+            h3 class=font-bold text-gray-800 id=tableHeaderTitleรายการบริจาคทั้งหมดh3
+            span id=rowCount class=text-xs text-gray-5000 รายการspan
+          div
+          div class=overflow-x-auto
+            table class=w-full text-left text-xs border-collapse
+              thead class=bg-gray-100 text-gray-700 uppercase font-semibold border-b
+                tr
+                  th class=py-3 px-3เวลาth
+                  th class=py-3 px-3ชื่อth
+                  th class=py-3 px-3 text-rightจำนวนth
+                  th class=py-3 px-3ประเภทบุคคลth
+                  th class=py-3 px-3ช่องทางth
+                  th class=py-3 px-3REFth
+                  th class=py-3 px-3 admin-onlyเบอร์โทรth
+                  th class=py-3 px-3 admin-onlyอีเมลth
+                  th class=py-3 px-3สลิปth
+                  th class=py-3 px-3เลขประจำตัว 13 หลักth
+                  th class=py-3 px-3 text-centerใบเสร็จth
+                tr
+              thead
+              tbody id=dataTableBody class=divide-y divide-gray-100 text-gray-600
+                trtd colspan=11 class=text-center py-6 text-gray-400กำลังโหลดข้อมูล...tdtr
+              tbody
+            table
+          div
+        div
+      section
+
+      !-- 3. แท็บ 5 อันดับสูงสุด (Admin Only) --
+      section id=tab-top5 class=tab-content hidden space-y-6
+        div class=bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden
+          div class=p-4 border-b bg-gray-50
+            h3 class=font-bold text-gray-800 text-base🏆 5 อันดับผู้บริจาคยอดรวมสูงสุด (Top 5)h3
+          div
+          table class=w-full text-left text-sm
+            thead class=bg-gray-100 text-gray-700 font-semibold border-b
+              tr
+                th class=py-3 px-4 w-20 text-centerอันดับth
+                th class=py-3 px-4ชื่อth
+                th class=py-3 px-4 text-rightยอดรวมรายบุคคลth
+              tr
+            thead
+            tbody id=top5TableBody class=divide-y divide-gray-100tbody
+          table
+        div
+      section
+
+      !-- 4. แท็บสถิติและเปรียบเทียบ (Admin Only) --
+      section id=tab-charts class=tab-content hidden space-y-6
+        div class=grid grid-cols-1 mdgrid-cols-2 gap-6
+          div class=bg-white p-6 rounded-2xl shadow-sm border border-gray-200
+            h3 class=font-bold text-gray-800 mb-4 text-smเปรียบเทียบช่องทาง (Offline  Online) - ยอดรวมเงินh3
+            div class=w-72 mx-auto
+              canvas id=channelChartcanvas
+            div
+          div
+          div class=bg-white p-6 rounded-2xl shadow-sm border border-gray-200
+            h3 class=font-bold text-gray-800 mb-4 text-smประเภทบุคคล (บุคคลธรรมดา  นิติบุคคล) - ยอดรวมเงินh3
+            div class=w-72 mx-auto
+              canvas id=personChartcanvas
+            div
+          div
+          div class=bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mdcol-span-2
+            h3 class=font-bold text-gray-800 mb-4 text-smยอดรวมเปรียบเทียบรายเดือน (Monthly Graph)h3
+            div class=h-72
+              canvas id=monthlyChartcanvas
+            div
+          div
+        div
+      section
+
+      !-- 5. แท็บตั้งค่าระบบ (Admin Settings Tab) --
+      section id=tab-settings class=tab-content hidden space-y-6
+        div class=bg-white p-6 rounded-2xl shadow-sm border border-gray-200 max-w-2xl
+          h2 class=text-lg font-bold text-gray-800 mb-4 border-b pb-3 flex items-center gap-2
+            span⚙️span การตั้งค่าระบบและการตรวจสอบสลิป (Admin Settings)
+          h2
+          form id=settingsForm class=space-y-4
+            div
+              label class=block text-xs font-semibold text-gray-700 mb-1ชื่อบัญชีผู้รับเงินที่ถูกต้องบนสลิป (สำหรับตรวจสอบ OCR) label
+              input type=text id=cfgReceiverKeywords required placeholder=เช่น มูลนิธิโรงพยาบาลเกษตรศาสตร์, ม.เกษตรศาสตร์ class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+              p class=text-[11px] text-gray-500 mt-1คั่นด้วยเครื่องหมายจุลภาค (,) หากสลิปไม่มีคำเหล่านี้ ระบบจะแจ้งเตือนและไม่อนุญาตให้บันทึกp
+            div
+
+            div class=flex items-center justify-between p-3 bg-gray-50 rounded-xl border
+              div
+                p class=text-sm font-semibold text-gray-800เปิดระบบตรวจจับ สลิปซ้ำ (Duplicate Slip Prevention)p
+                p class=text-xs text-gray-500ปฏิเสธการบันทึกทันทีหากรูปสลิปนี้เคยถูกอัปโหลดมาก่อนหน้าp
+              div
+              input type=checkbox id=cfgCheckDuplicate class=w-5 h-5 accent-emerald-600 rounded
+            div
+
+            div class=flex items-center justify-between p-3 bg-gray-50 rounded-xl border
+              div
+                p class=text-sm font-semibold text-gray-800เปิดระบบตรวจสอบชื่อผู้รับด้วย OCR (Verify Receiver Name)p
+                p class=text-xs text-gray-500สแกนข้อความบนรูปสลิปเพื่อยืนยันว่าโอนเงินเข้าบัญชีโรงพยาบาลจริงp
+              div
+              input type=checkbox id=cfgCheckReceiver class=w-5 h-5 accent-emerald-600 rounded
+            div
+
+            div
+              label class=block text-xs font-semibold text-gray-700 mb-1หัวเรื่องหน่วยงานบนใบเสร็จ (Receipt Header)label
+              input type=text id=cfgFoundationName required placeholder=มูลนิธิโรงพยาบาลเกษตรศาสตร์ class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+
+            div
+              label class=block text-xs font-semibold text-gray-700 mb-1วัตถุประสงค์เริ่มต้น (Default Purpose)label
+              input type=text id=cfgDefaultPurpose required placeholder=สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์ class=w-full px-3 py-2 border rounded-xl text-sm focusring-2 focusring-emerald-500 outline-none
+            div
+
+            button type=submit class=bg-emerald-600 hoverbg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-sm transition
+              💾 บันทึกการตั้งค่า
+            button
+          form
+        div
+      section
+
+    main
+  div
+
+  !-- ==================== เอกสารใบรับบริจาคใบอนุโมทนาบัตร สำหรับพิมพ์ ==================== --
+  div id=printSection class=text-black bg-white
+    div class=text-center mb-6
+      div class=flex justify-center mb-1
+        img src=httpsi.ibb.co3mfxw0JcScreenshot-2026-09-01-232358.png alt=โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์ class=h-32 w-auto object-contain
+      div
+      h1 class=text-2xl font-bold mt-2 text-gray-900 tracking-widerใบรับบริจาค  ใบอนุโมทนาh1
+      div class=w-full border-b-2 border-gray-800 mt-2div
+    div
+
+    div class=flex justify-between items-start text-sm leading-relaxed mb-6
+      div
+        h2 class=font-bold text-base text-gray-900โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์h2
+        p class=text-xs text-gray-600มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักรbrกรุงเทพมหานคร 10900, Bangkok, Thailand, 10900p
+        p class=text-xs text-gray-600 mt-1เลขที่หน่วยรับบริจาค span class=font-monoXXXXXXXXXXXXspanp
+      div
+      div class=text-right
+        pstrongเลขที่อ้างอิงstrong span id=p-ref class=font-mono font-bold-spanp
+        pstrongวันที่strong span id=p-date-spanp
+        pstrongเวลาstrong span id=p-time-span น.p
+      div
+    div
+
+    div class=space-y-4 text-sm mt-6
+      div class=flex justify-between
+        p class=w-12strongชื่อผู้บริจาคstrong span id=p-name class=font-semibold-spanp
+        p class=w-12strongเลขประจำตัวผู้เสียภาษีอากรบัตรประชาชนstrong span id=p-tax class=font-mono-spanp
+      div
+      div class=flex justify-between
+        p class=w-fullstrongที่อยู่strong span id=p-address-spanp
+      div
+      div class=pt-2
+        pstrongบริจาคเงินเพื่อstrong span id=p-purpose class=border-b border-dotted border-gray-500 pb-1 inline-block w-34-spanp
+      div
+      div class=text-center py-5 space-y-1
+        p class=text-baseจำนวนเงิน span id=p-amount class=text-xl font-bold px-2-span บาทp
+        p class=text-gray-700( span id=p-amount-thai class=font-semibold-span )p
+      div
+    div
+  div
+
+  !-- ==================== Logic Script ==================== --
+  script
+    const GOOGLE_SCRIPT_WEBAPP_URL = httpsscript.google.commacrossAKfycbyPKQq_46BzsHy-pk0Yq1SLygNYwxsINXQKA8tRj4m3BriJSY5maRs0ClDIfk7mIacxexec;
+
+    const firebaseConfig = {
+      apiKey AIzaSyCLMrf1-RWR85V1p7pgs2up-ZbKOIziDf4,
+      authDomain prototype-4c0c4.firebaseapp.com,
+      databaseURL httpsprototype-4c0c4-default-rtdb.asia-southeast1.firebasedatabase.app,
+      projectId prototype-4c0c4,
+      storageBucket prototype-4c0c4.firebasestorage.app,
+      messagingSenderId 1051696625061,
+      appId 11051696625061web410699a8c52e891147e44c,
+      measurementId G-THH48QV8SE
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const recordsRef = db.ref(donations);
+    const usersRef = db.ref(users);
+    const settingsRef = db.ref(system_settings);
+
+    let currentUser = null;
+    let recordsData = {};
+    let currentFilteredList = [];
+    let channelChartInstance = null;
+    let personChartInstance = null;
+    let monthlyChartInstance = null;
+    let nextTxnNumber = TXN-000001;
+
+    let systemSettings = {
+      receiverKeywords มูลนิธิโรงพยาบาลเกษตรศาสตร์, เกษตรศาสตร์, KU, โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์,
+      checkDuplicate true,
+      checkReceiver true,
+      foundationName มูลนิธิโรงพยาบาลเกษตรศาสตร์,
+      defaultPurpose สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์
+    };
+
+    settingsRef.on(value, snap = {
+      if (snap.exists()) {
+        systemSettings = { ...systemSettings, ...snap.val() };
+      }
+      document.getElementById(cfgReceiverKeywords).value = systemSettings.receiverKeywords;
+      document.getElementById(cfgCheckDuplicate).checked = systemSettings.checkDuplicate;
+      document.getElementById(cfgCheckReceiver).checked = systemSettings.checkReceiver;
+      document.getElementById(cfgFoundationName).value = systemSettings.foundationName;
+      document.getElementById(cfgDefaultPurpose).value = systemSettings.defaultPurpose;
+    });
+
+    document.getElementById(settingsForm).addEventListener(submit, (e) = {
+      e.preventDefault();
+      systemSettings = {
+        receiverKeywords document.getElementById(cfgReceiverKeywords).value.trim(),
+        checkDuplicate document.getElementById(cfgCheckDuplicate).checked,
+        checkReceiver document.getElementById(cfgCheckReceiver).checked,
+        foundationName document.getElementById(cfgFoundationName).value.trim(),
+        defaultPurpose document.getElementById(cfgDefaultPurpose).value.trim()
+      };
+      settingsRef.set(systemSettings)
+        .then(() = alert(บันทึกการตั้งค่าระบบเรียบร้อยแล้ว!))
+        .catch(err = alert(เกิดข้อผิดพลาด  + err.message));
+    });
+
+    function switchAuthMode(mode) {
+      if (mode === 'login') {
+        document.getElementById(loginForm).classList.remove(hidden);
+        document.getElementById(signupForm).classList.add(hidden);
+        document.getElementById(tabBtnLogin).className = w-12 py-2 rounded-lg bg-white shadow-sm text-emerald-700 font-bold transition;
+        document.getElementById(tabBtnSignup).className = w-12 py-2 rounded-lg text-slate-500 hovertext-slate-800 transition;
+      } else {
+        document.getElementById(loginForm).classList.add(hidden);
+        document.getElementById(signupForm).classList.remove(hidden);
+        document.getElementById(tabBtnSignup).className = w-12 py-2 rounded-lg bg-white shadow-sm text-emerald-700 font-bold transition;
+        document.getElementById(tabBtnLogin).className = w-12 py-2 rounded-lg text-slate-500 hovertext-slate-800 transition;
+      }
+    }
+
+    document.getElementById(loginForm).addEventListener(submit, async (e) = {
+      e.preventDefault();
+      const u = document.getElementById(loginUsername).value.trim();
+      const p = document.getElementById(loginPassword).value.trim();
+
+      if (u === piwmifp.pj@gmail.com && p === asdlkj0987) {
+        currentUser = {
+          role admin,
+          username u,
+          fullName Admin (โรงพยาบาล),
+          taxId 
+        };
+        startApp();
+        return;
+      }
+
+      const snap = await usersRef.once(value);
+      const users = snap.val()  {};
+      let foundUser = null;
+
+      for (let key in users) {
+        if (users[key].username.toLowerCase() === u.toLowerCase() && users[key].password === p) {
+          foundUser = { id key, role user, ...users[key] };
+          break;
+        }
+      }
+
+      if (foundUser) {
+        currentUser = foundUser;
+        startApp();
+      } else {
+        alert(ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!);
+      }
+    });
+
+    document.getElementById(signupForm).addEventListener(submit, async (e) = {
+      e.preventDefault();
+      const u = document.getElementById(signupUsername).value.trim();
+      const p = document.getElementById(signupPassword).value.trim();
+      const name = document.getElementById(signupFullName).value.trim();
+      const tax = document.getElementById(signupTaxId).value.trim();
+
+      if (u.toLowerCase() === piwmifp.pj@gmail.com) {
+        alert(ไม่สามารถใช้อีเมลนี้สมัครได้);
+        return;
+      }
+
+      const snap = await usersRef.once(value);
+      const users = snap.val()  {};
+      for (let key in users) {
+        if (users[key].username.toLowerCase() === u.toLowerCase()) {
+          alert(ชื่อผู้ใช้หรืออีเมลนี้ถูกลงทะเบียนไปแล้ว!);
+          return;
+        }
+      }
+
+      const newUser = {
+        username u,
+        password p,
+        fullName name,
+        taxId tax,
+        createdAt new Date().toISOString()
+      };
+
+      await usersRef.push(newUser);
+      alert(ลงทะเบียนสำเร็จเรียบร้อย! สามารถเข้าสู่ระบบได้ทันที);
+      switchAuthMode(login);
+      document.getElementById(loginUsername).value = u;
+      document.getElementById(loginPassword).value = p;
+    });
+
+    function startApp() {
+      document.getElementById(authContainer).classList.add(hidden);
+      document.getElementById(mainAppContainer).classList.remove(hidden);
+
+      document.getElementById(userDisplayName).innerText = currentUser.fullName;
+      document.getElementById(userAvatar).innerText = currentUser.fullName.charAt(0).toUpperCase();
+      document.getElementById(userRoleBadge).innerText = currentUser.role === admin  👑 ผู้ดูแลระบบ (Admin)  👤 ผู้บริจาค (Member);
+
+      if (currentUser.role === admin) {
+        document.querySelectorAll(.admin-only).forEach(el = el.classList.remove(hidden));
+        document.getElementById(userPersonalCard).classList.add(hidden);
+        document.getElementById(tableHeaderTitle).innerText = รายการบริจาคทั้งหมด (Admin View);
+        document.getElementById(labelTabTotal).innerText = ยอดรวม & รายการทั้งหมด;
+        switchTab(tab-total);
+      } else {
+        document.querySelectorAll(.admin-only).forEach(el = el.classList.add(hidden));
+        document.getElementById(userPersonalCard).classList.remove(hidden);
+        document.getElementById(tableHeaderTitle).innerText = `ประวัติการบริจาคของคุณ (${currentUser.fullName})`;
+        document.getElementById(labelTabTotal).innerText = ประวัติการบริจาคของฉัน;
+        switchTab(tab-total);
+      }
+
+      listenToDatabase();
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById(mainAppContainer).classList.add(hidden);
+      document.getElementById(authContainer).classList.remove(hidden);
+      document.getElementById(loginForm).reset();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el = el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.menu-btn').forEach(btn = {
+        btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+        btn.classList.add('text-gray-600');
+      });
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-emerald-50', 'text-emerald-700');
+        activeBtn.classList.remove('text-gray-600');
+      }
+    }
+
+    function updateNextTxnRef(items) {
+      let maxNum = 0;
+      items.forEach(item = {
+        if (item.txnRef) {
+          const match = item.txnRef.match(d+);
+          if (match) {
+            const num = parseInt(match[0], 10);
+            if (num  maxNum) maxNum = num;
+          }
+        }
+      });
+      nextTxnNumber = TXN- + String(maxNum + 1).padStart(6, '0');
+      const txnInput = document.getElementById(txnRef);
+      if (txnInput) txnInput.value = nextTxnNumber;
+    }
+
+    async function calculateFileHash(file) {
+      const buffer = await file.arrayBuffer();
+      const hashBuffer = await crypto.subtle.digest(SHA-256, buffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b = b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) = {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () = resolve(reader.result.split(',')[1]);
+        reader.onerror = error = reject(error);
+      });
+    }
+
+     จัดการการส่งฟอร์ม พร้อมแจ้งเตือน Discord เมื่อสลิปผิดพลาด แต่ไม่บันทึกลง SheetFirebase
+    document.getElementById(donationForm).addEventListener(submit, async function(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById(submitBtn);
+      const statusLabel = document.getElementById(slipCheckStatus);
+      const fileInput = document.getElementById(slipFileInput);
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert(กรุณาเลือกไฟล์ภาพสลิปโอนเงิน);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = ⏳ กำลังตรวจสอบความถูกต้องของสลิป...;
+      statusLabel.innerText = ⏳ กำลังตรวจสอบสลิป...;
+
+      try {
+        const fileHash = await calculateFileHash(file);
+        const allItems = Object.values(recordsData);
+        let slipStatus = valid;
+        let errorMessage = ;
+
+         1. ตรวจสอบสลิปซ้ำ
+        if (systemSettings.checkDuplicate) {
+          const isDuplicate = allItems.some(item = item.slipHash && item.slipHash === fileHash);
+          if (isDuplicate) {
+            slipStatus = duplicate;
+            errorMessage = ❌ สลิปนี้เคยถูกอัปโหลดใช้งานในระบบแล้ว (สลิปซ้ำ)! ระบบจะไม่บันทึกข้อมูลลงฐานข้อมูล;
+          }
+        }
+
+         2. ตรวจสอบชื่อบัญชีผู้รับด้วย OCR (ถ้ายังไม่ติดสลิปซ้ำ)
+        if (slipStatus === valid && systemSettings.checkReceiver) {
+          statusLabel.innerText = 🔍 กำลังสแกนข้อความบนสลิป (OCR)...;
+          const ocrResult = await Tesseract.recognize(file, 'tha+eng');
+          const ocrText = ocrResult.data.text.replace(s+g, '');
+
+          const keywords = systemSettings.receiverKeywords.split(',').map(k = k.trim().replace(s+g, '')).filter(k = k);
+          const hasValidReceiver = keywords.some(k = ocrText.includes(k));
+
+          if (!hasValidReceiver && keywords.length  0) {
+            slipStatus = invalid_receiver;
+            errorMessage = `❌ ตรวจไม่พบชื่อบัญชีผู้รับ (${systemSettings.receiverKeywords}) บนรูปสลิปนี้! ระบบจะไม่บันทึกข้อมูลลงฐานข้อมูล`;
+          }
+        }
+
+        const now = new Date();
+        const timeStr = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH', {hour '2-digit', minute'2-digit'});
+
+        const recordPayload = {
+          timestamp now.toISOString(),
+          timeStr timeStr,
+          txnRef document.getElementById(txnRef).value,
+          donorName document.getElementById(donorName).value.trim(),
+          amount parseFloat(document.getElementById(amount).value)  0,
+          personType document.getElementById(personType).value,
+          channel document.getElementById(channel).value,
+          phone document.getElementById(phoneNumber).value.trim(),
+          taxId document.getElementById(taxId).value.trim(),
+          email document.getElementById(email).value.trim(),
+          address document.getElementById(address).value.trim(),
+          purpose document.getElementById(purpose).value.trim()  systemSettings.defaultPurpose,
+          slipHash fileHash,
+          slipStatus slipStatus  ส่งสถานะ (valid  duplicate  invalid_receiver) ไปยัง Apps Script
+        };
+
+         ส่งรูปไป Google Apps Script เพื่อบันทึกลง Drive และแจ้งเตือน Discord (ถ้าไม่ valid จะไม่ลง Google Sheet)
+        if (GOOGLE_SCRIPT_WEBAPP_URL.includes(script.google.com)) {
+          statusLabel.innerText = 📡 กำลังส่งข้อมูลและแจ้งเตือนไปยังระบบ...;
+          const base64Data = await fileToBase64(file);
+          const response = await fetch(GOOGLE_SCRIPT_WEBAPP_URL, {
+            method POST,
+            body JSON.stringify({
+              ...recordPayload,
+              fileName `slip_${recordPayload.txnRef}_${file.name}`,
+              fileType file.type,
+              base64Data base64Data
+            })
+          });
+          const res = await response.json();
+          recordPayload.slipUrl = res.fileUrl  ;
+        }
+
+         กรณีสลิปไม่ถูกต้อง แจ้งเตือนผู้ส่งทันที และไม่บันทึกลง Firebase
+        if (slipStatus !== valid) {
+          alert(errorMessage + nn(ระบบได้ส่งแจ้งเตือนสถานะความผิดปกติไปยัง Discord ให้เจ้าหน้าที่แล้ว));
+          statusLabel.innerText = errorMessage;
+          return;
+        }
+
+         กรณีสลิปถูกต้อง บันทึกลง Firebase ตามปกติ
+        await recordsRef.push(recordPayload);
+        alert(`✅ บันทึกข้อมูลและสลิปสำเร็จเรียบร้อย! ส่งแจ้งเตือนลง Discord เรียบร้อยแล้ว (REF ${recordPayload.txnRef})`);
+        document.getElementById(donationForm).reset();
+        statusLabel.innerText = ;
+        switchTab('tab-total');
+
+      } catch (err) {
+        alert(เกิดข้อผิดพลาด  + err.message);
+        statusLabel.innerText = err.message;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 💾 ตรวจสอบและบันทึกข้อมูลสลิป;
+      }
+    });
+
+    function listenToDatabase() {
+      recordsRef.on(value, (snapshot) = {
+        recordsData = snapshot.val()  {};
+        const allItems = Object.entries(recordsData).map(([key, val]) = ({ id key, ...val }));
+
+        updateNextTxnRef(allItems);
+
+        let projectGrandTotal = 0;
+        allItems.forEach(i = projectGrandTotal += Number(i.amount  0));
+        document.getElementById(totalSumHeader).innerText = projectGrandTotal.toLocaleString('th-TH', {minimumFractionDigits 2}) +  บาท;
+
+         คัดกรองข้อมูลตาม Role User ต้องตรง ทั้งชื่อ และ เลขประจำตัว 13 หลัก
+        if (currentUser && currentUser.role === user) {
+          currentFilteredList = allItems.filter(i = {
+            const matchName = i.donorName && i.donorName.trim().toLowerCase() === currentUser.fullName.trim().toLowerCase();
+            const matchTax = i.taxId && i.taxId.trim() === currentUser.taxId.trim();
+            return matchName && matchTax;
+          });
+
+          let mySum = 0;
+          currentFilteredList.forEach(i = mySum += Number(i.amount  0));
+          document.getElementById(myTotalSumHeader).innerText = mySum.toLocaleString('th-TH', {minimumFractionDigits 2}) +  บาท;
+        } else {
+          currentFilteredList = allItems;
+        }
+
+        handleSearch();
+
+        if (currentUser && currentUser.role === admin) {
+          renderTop5(allItems);
+          renderCharts(allItems);
+        }
+      });
+    }
+
+    function handleSearch() {
+      const query = (document.getElementById(searchInput).value  ).trim().toLowerCase();
+      let results = currentFilteredList;
+
+      if (query) {
+        results = currentFilteredList.filter(item = {
+          const matchName = item.donorName && item.donorName.toLowerCase().includes(query);
+          const matchRef = item.txnRef && item.txnRef.toLowerCase().includes(query);
+          const matchTax = item.taxId && item.taxId.toLowerCase().includes(query);
+          return matchName  matchRef  matchTax;
+        });
+      }
+
+      renderTable(results);
+    }
+
+    function renderTable(items) {
+      const tbody = document.getElementById(dataTableBody);
+      tbody.innerHTML = ;
+      
+      const reversed = [...items].reverse();
+
+      if (reversed.length === 0) {
+        tbody.innerHTML = `trtd colspan=11 class=text-center py-6 text-gray-400ไม่พบข้อมูลรายการบริจาคtdtr`;
+        document.getElementById(rowCount).innerText = `0 รายการ`;
+        return;
+      }
+
+      reversed.forEach(item = {
+        const tr = document.createElement(tr);
+        tr.className = hoverbg-gray-50 transition border-b;
+        tr.innerHTML = `
+          td class=py-3 px-3${item.timeStr  '-'}td
+          td class=py-3 px-3 font-semibold text-gray-800${item.donorName}td
+          td class=py-3 px-3 text-right font-bold text-emerald-700${Number(item.amount).toLocaleString('th-TH', {minimumFractionDigits 2})}td
+          td class=py-3 px-3${item.personType}td
+          td class=py-3 px-3span class=px-2 py-0.5 rounded text-xs ${item.channel === 'Online'  'bg-blue-50 text-blue-700'  'bg-orange-50 text-orange-700'}${item.channel}spantd
+          td class=py-3 px-3 font-mono text-gray-500 font-bold${item.txnRef}td
+          td class=py-3 px-3 font-mono admin-only ${currentUser && currentUser.role !== 'admin'  'hidden'  ''}${item.phone  '-'}td
+          td class=py-3 px-3 admin-only ${currentUser && currentUser.role !== 'admin'  'hidden'  ''}${item.email  '-'}td
+          td class=py-3 px-3 text-center
+            ${item.slipUrl  `a href=${item.slipUrl} target=_blank class=text-blue-600 hoverunderline font-mediumดูสลิปa`  '-'}
+          td
+          td class=py-3 px-3 font-mono${item.taxId  '-'}td
+          td class=py-3 px-3 text-center
+            button onclick=printVoucher('${item.id}') class=bg-gray-800 hoverbg-black text-white px-2.5 py-1 rounded text-xs shadow
+              🖨️ พิมพ์
+            button
+          td
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById(rowCount).innerText = `${items.length} รายการ`;
+    }
+
+    function renderTop5(items) {
+      const donorSums = {};
+      items.forEach(item = {
+        donorSums[item.donorName] = (donorSums[item.donorName]  0) + Number(item.amount  0);
+      });
+
+      const sorted = Object.entries(donorSums)
+        .sort((a, b) = b[1] - a[1])
+        .slice(0, 5);
+
+      const tbody = document.getElementById(top5TableBody);
+      tbody.innerHTML = ;
+      sorted.forEach(([name, total], idx) = {
+        const tr = document.createElement(tr);
+        tr.className = hoverbg-gray-50;
+        tr.innerHTML = `
+          td class=py-3 px-4 text-center font-bold text-emerald-700${idx + 1}td
+          td class=py-3 px-4 font-semibold${name}td
+          td class=py-3 px-4 text-right font-bold text-gray-800$${total.toLocaleString('en-US', {minimumFractionDigits 2})}td
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderCharts(items) {
+      let onlineSum = 0, offlineSum = 0;
+      let personSum = 0, juristicSum = 0;
+      const monthlySums = {};
+
+      items.forEach(item = {
+        const amt = Number(item.amount  0);
+        if (item.channel === 'Online') onlineSum += amt; else offlineSum += amt;
+        if (item.personType === 'บุคคลธรรมดา') personSum += amt; else juristicSum += amt;
+
+        let year = 2026, month = 1;
+        if (item.timestamp) {
+          const d = new Date(item.timestamp);
+          if (!isNaN(d.getTime())) {
+            year = d.getFullYear();
+            month = d.getMonth() + 1;
+          }
+        }
+        
+        if (year  2500) {
+          year -= 543;
+        }
+
+        const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+        monthlySums[monthKey] = (monthlySums[monthKey]  0) + amt;
+      });
+
+      const totalChannel = onlineSum + offlineSum;
+      const totalPerson = personSum + juristicSum;
+
+      const onlinePct = totalChannel  0  ((onlineSum  totalChannel)  100).toFixed(1)  0.0;
+      const offlinePct = totalChannel  0  ((offlineSum  totalChannel)  100).toFixed(1)  0.0;
+      const juristicPct = totalPerson  0  ((juristicSum  totalPerson)  100).toFixed(1)  0.0;
+      const personPct = totalPerson  0  ((personSum  totalPerson)  100).toFixed(1)  0.0;
+
+       1. Chart ช่องทาง
+      if (channelChartInstance) channelChartInstance.destroy();
+      channelChartInstance = new Chart(document.getElementById(channelChart), {
+        type 'doughnut',
+        data {
+          labels [
+            `Online (${onlineSum.toLocaleString('th-TH', {minimumFractionDigits 2})} ฿ - ${onlinePct}%)`,
+            `Offline (${offlineSum.toLocaleString('th-TH', {minimumFractionDigits 2})} ฿ - ${offlinePct}%)`
+          ],
+          datasets [{ data [onlineSum, offlineSum], backgroundColor ['#38bdf8', '#0284c7'] }]
+        },
+        options {
+          plugins {
+            datalabels { display false },
+            legend { position 'top', labels { boxWidth 15, font { size 12, family 'Sarabun' } } }
+          }
+        }
+      });
+
+       2. Chart ประเภทบุคคล
+      if (personChartInstance) personChartInstance.destroy();
+      personChartInstance = new Chart(document.getElementById(personChart), {
+        type 'doughnut',
+        data {
+          labels [
+            `นิติบุคคล (${juristicSum.toLocaleString('th-TH', {minimumFractionDigits 2})} ฿ - ${juristicPct}%)`,
+            `บุคคลธรรมดา (${personSum.toLocaleString('th-TH', {minimumFractionDigits 2})} ฿ - ${personPct}%)`
+          ],
+          datasets [{ data [juristicSum, personSum], backgroundColor ['#0284c7', '#bae6fd'] }]
+        },
+        options {
+          plugins {
+            datalabels { display false },
+            legend { position 'top', labels { boxWidth 15, font { size 12, family 'Sarabun' } } }
+          }
+        }
+      });
+
+       3. Chart รายเดือน
+      if (monthlyChartInstance) monthlyChartInstance.destroy();
+      const monthKeys = Object.keys(monthlySums).sort();
+      const monthData = monthKeys.map(m = monthlySums[m]);
+      
+      const formattedMonthLabels = monthKeys.map((m, idx) = {
+        if (idx === 0) return m;
+        const prev = monthData[idx - 1];
+        const curr = monthData[idx];
+        if (prev === 0) return `${m} (+100.00%)`;
+        const diff = curr - prev;
+        const pctChange = ((diff  prev)  100).toFixed(2);
+        const sign = diff = 0  '+'  '';
+        return `${m} (${sign}${Number(pctChange).toLocaleString('en-US', {minimumFractionDigits 2})}%)`;
+      });
+
+      const maxVal = Math.max(...monthData, 0);
+
+      monthlyChartInstance = new Chart(document.getElementById(monthlyChart), {
+        type 'bar',
+        plugins [ChartDataLabels],
+        data {
+          labels formattedMonthLabels,
+          datasets [{
+            label 'ยอดรวม (บาท)',
+            data monthData,
+            backgroundColor '#0284c7',
+            borderRadius 6,
+            maxBarThickness 120
+          }]
+        },
+        options {
+          responsive true,
+          maintainAspectRatio false,
+          layout { padding { top 30 } },
+          scales {
+            x { ticks { font { family 'Sarabun', size 11, weight '600' }, color '#334155' } },
+            y { beginAtZero true, suggestedMax maxVal  0  maxVal  1.2  1000 }
+          },
+          plugins {
+            datalabels {
+              anchor 'end',
+              align 'top',
+              offset 4,
+              font { family 'Sarabun', weight 'bold', size 13 },
+              color '#0f172a',
+              formatter (v) = v  0  v.toLocaleString('th-TH', {minimumFractionDigits 2}) + ' ฿'  '0.00 ฿'
+            }
+          }
+        }
+      });
+    }
+
+    function thaiBahtText(num) {
+      if (isNaN(num)) return -;
+      const numbers = [ศูนย์, หนึ่ง, สอง, สาม, สี่, ห้า, หก, เจ็ด, แปด, เก้า];
+      const units = [, สิบ, ร้อย, พัน, หมื่น, แสน, ล้าน];
+      let [integer, decimal] = num.toFixed(2).split(.);
+      
+      function convertGroup(val) {
+        let str = ;
+        for (let i = 0; i  val.length; i++) {
+          let n = parseInt(val[i]);
+          let u = val.length - 1 - i;
+          if (n !== 0) {
+            if (u === 0 && n === 1 && val.length  1) str += เอ็ด;
+            else if (u === 1 && n === 2) str += ยี่;
+            else if (u === 1 && n === 1) str += ;
+            else str += numbers[n];
+            str += units[u];
+          }
+        }
+        return str;
+      }
+
+      let res = convertGroup(integer) + บาท;
+      if (parseInt(decimal) === 0) res += ถ้วน; else res += convertGroup(decimal) + สตางค์;
+      return res;
+    }
+
+    function printVoucher(id) {
+      const item = recordsData[id];
+      if (!item) return;
+
+      const d = item.timestamp  new Date(item.timestamp)  new Date();
+      document.getElementById(p-ref).innerText = item.txnRef  -;
+      document.getElementById(p-date).innerText = `${String(d.getDate()).padStart(2, '0')}${String(d.getMonth() + 1).padStart(2, '0')}${d.getFullYear()}`;
+      document.getElementById(p-time).innerText = `${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}`;
+      document.getElementById(p-name).innerText = item.donorName  -;
+      document.getElementById(p-tax).innerText = item.taxId  -;
+      document.getElementById(p-address).innerText = item.address  -;
+      document.getElementById(p-purpose).innerText = item.purpose  systemSettings.defaultPurpose;
+      document.getElementById(p-amount).innerText = Number(item.amount).toLocaleString('th-TH', {minimumFractionDigits 2});
+      document.getElementById(p-amount-thai).innerText = thaiBahtText(Number(item.amount));
+
+      window.print();
+    }
+  script
+body
+htmlscript async src=.netlifyscriptshudvariant=public data-nf-variant=public data-netlify-site-id=e91742ff-ecf7-43c8-a36b-ea6ff390c543 data-app-host=app.netlify.comscript
