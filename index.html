@@ -797,6 +797,8 @@
 
     // ==================== SESSION PERSISTENCE ====================
     const SESSION_KEY = 'kuDonationSession';
+    const SESSION_DURATION_MS = 10 * 60 * 1000; // บังคับออกจากระบบทุก 10 นาที
+    let sessionExpiryTimer = null;
 
     function sanitizeUserForStorage(user) {
       if (!user) return null;
@@ -809,7 +811,8 @@
       try {
         localStorage.setItem(SESSION_KEY, JSON.stringify({
           user: sanitizeUserForStorage(currentUser),
-          inApp: !!inApp
+          inApp: !!inApp,
+          loginAt: Date.now()
         }));
       } catch (err) {
         console.warn('ไม่สามารถบันทึก session ได้:', err);
@@ -818,6 +821,33 @@
 
     function clearSession() {
       try { localStorage.removeItem(SESSION_KEY); } catch (err) {}
+      if (sessionExpiryTimer) {
+        clearTimeout(sessionExpiryTimer);
+        sessionExpiryTimer = null;
+      }
+    }
+
+    // เริ่มจับเวลานับถอยหลัง แล้วบังคับ logout อัตโนมัติเมื่อครบ 10 นาทีนับจาก loginAt
+    function scheduleSessionExpiry(loginAt) {
+      if (sessionExpiryTimer) {
+        clearTimeout(sessionExpiryTimer);
+        sessionExpiryTimer = null;
+      }
+      const elapsed = Date.now() - loginAt;
+      const remaining = SESSION_DURATION_MS - elapsed;
+
+      if (remaining <= 0) {
+        forceSessionExpire();
+        return;
+      }
+
+      sessionExpiryTimer = setTimeout(forceSessionExpire, remaining);
+    }
+
+    function forceSessionExpire() {
+      if (!currentUser) return;
+      logout();
+      alert('เซสชันของคุณหมดอายุ (ครบ 10 นาที) กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
     }
 
     function restoreSession() {
@@ -829,7 +859,15 @@
       }
       if (!saved || !saved.user) return;
 
+      // เซสชันเก่า (ก่อนมี loginAt) หรือหมดอายุแล้ว ให้เคลียร์ทิ้งและไม่ restore
+      const loginAt = saved.loginAt || 0;
+      if (!loginAt || Date.now() - loginAt >= SESSION_DURATION_MS) {
+        clearSession();
+        return;
+      }
+
       currentUser = saved.user;
+      scheduleSessionExpiry(loginAt);
 
       if (saved.inApp) {
         startApp();
@@ -902,6 +940,7 @@
       closeAuthModal(); 
       syncHeaderNav();
       saveSession(false);
+      scheduleSessionExpiry(Date.now());
     }
 
     function backToHome() {
