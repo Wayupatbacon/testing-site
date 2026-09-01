@@ -58,17 +58,17 @@
       </div>
     </header>
 
-    <!-- Section 1: Hero Banner Slider (รูปที่ 1) -->
-    <section class="relative bg-slate-900 text-white py-20 overflow-hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-12">
+    <!-- Section 1: Hero Banner Slider (ใช้นำรูปใหม่จาก Drive มาใส่) -->
+    <section class="relative bg-slate-900 text-white py-16 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-10">
         <div class="space-y-6 md:w-1/2">
           <span class="bg-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">KU Hospital Foundation</span>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
             ยินดีต้อนรับสู่ <br>
             <span class="text-emerald-400">ระบบบริหารจัดการเงินบริจาค</span> <br>
             โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์
           </h1>
-          <p class="text-slate-300 text-base">
+          <p class="text-slate-300 text-sm md:text-base">
             ร่วมเป็นส่วนหนึ่งในการสนับสนุนการรักษาพยาบาล จัดซื้อเครื่องมือทางการแพทย์ และพัฒนาอาคารโรงพยาบาลเพื่อสังคม
           </p>
           <div class="pt-2">
@@ -77,17 +77,19 @@
             </button>
           </div>
         </div>
-        <div class="md:w-1/2 flex justify-center">
-          <div class="w-full max-w-lg bg-emerald-800/40 border border-emerald-500/30 rounded-3xl p-8 backdrop-blur-md shadow-2xl text-center">
-            <div class="text-6xl mb-4">🏥</div>
-            <h3 class="text-2xl font-bold mb-2">เพื่อคุณภาพชีวิตที่ดีกว่า</h3>
-            <p class="text-slate-300 text-sm">การบริจาคของคุณสามารถนำไปลดหย่อนภาษีได้ตามที่กฎหมายกำหนดผ่านระบบ e-Donation</p>
+        
+        <!-- ส่วนแสดงรูปภาพภาพจาก Google Drive (ปรับขนาดและสัดส่วนให้พอดีอัตโนมัติ) -->
+        <div class="md:w-1/2 flex justify-center w-full">
+          <div class="w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-slate-700 bg-slate-800/50 aspect-video md:aspect-[4/3] flex items-center justify-center">
+            <img src="https://drive.google.com/uc?export=view&id=1c2_92PQwjh6nZjtavxNLztFX4aJX-jxV" 
+                 alt="ภาพประชาสัมพันธ์กองทุนบริจาค โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์" 
+                 class="w-full h-full object-cover rounded-3xl hover:scale-105 transition duration-500">
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 2: Action Donate (รูปที่ 2) -->
+    <!-- Section 2: Action Donate -->
     <section class="py-16 bg-white border-b">
       <div class="max-w-4xl mx-auto text-center px-4 space-y-6">
         <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">💚</div>
@@ -106,7 +108,7 @@
       </div>
     </section>
 
-    <!-- Section 3: How-to & Tax Benefits (รูปที่ 3 & 4) -->
+    <!-- Section 3: How-to & Tax Benefits -->
     <section class="py-16 bg-slate-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
@@ -131,7 +133,7 @@
       </div>
     </section>
 
-    <!-- Section 4: FAQ (รูปที่ 5) -->
+    <!-- Section 4: FAQ -->
     <section class="py-16 bg-white">
       <div class="max-w-3xl mx-auto px-4">
         <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 text-center mb-10">คำถามที่พบบ่อย</h2>
@@ -170,31 +172,38 @@
       </div>
     </section>
 
-    <!-- Section 5: Footer / Contact Info (รูปที่ 6 & 7) -->
+    <!-- Section 5: Footer / Contact Info (ตัด website ออกแล้วใส่ปุ่ม Facebook Icon) -->
     <footer class="bg-slate-900 text-slate-300 py-12 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h3 class="text-xl font-bold text-white mb-8">สอบถามข้อมูลเกี่ยวกับมูลนิธิ</h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+          <!-- Column 1: ที่อยู่ -->
           <div class="space-y-3">
-            <h4 class="font-bold text-emerald-400">มูลนิธิโรงพยาบาลเกษตรศาสตร์</h4>
+            <h4 class="font-bold text-emerald-400 text-base">มูลนิธิโรงพยาบาลเกษตรศาสตร์</h4>
             <p class="text-xs leading-relaxed text-slate-400">
               📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900
             </p>
           </div>
 
-          <div class="space-y-3">
-            <h4 class="font-bold text-emerald-400">เว็บไซต์หลัก</h4>
-            <p class="text-xs">
-              🔗 <a href="https://kuhospitalfoundation.org" target="_blank" class="text-blue-400 hover:underline">kuhospitalfoundation.org</a>
-            </p>
-          </div>
-
-          <div class="space-y-3">
-            <h4 class="font-bold text-emerald-400">ช่องทางติดต่อ</h4>
+          <!-- Column 2: ช่องทางติดต่อ + ปุ่ม Facebook Icon -->
+          <div class="space-y-4">
+            <h4 class="font-bold text-emerald-400 text-base">ช่องทางติดต่อ</h4>
             <p class="text-xs">📞 <strong>โทรศัพท์:</strong> 02 579 0113</p>
             <p class="text-xs">✉️ <strong>อีเมล:</strong> office@kuhospitalfoundation.org</p>
-            <p class="text-xs">💬 <strong>Facebook:</strong> มูลนิธิโรงพยาบาลเกษตรศาสตร์</p>
+            
+            <div class="pt-2">
+              <a href="https://www.facebook.com/kuhospitalfoundation" 
+                 target="_blank" 
+                 rel="noopener noreferrer" 
+                 class="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition duration-200">
+                <!-- SVG Facebook Icon -->
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span>มูลนิธิโรงพยาบาลเกษตรศาสตร์</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -267,7 +276,6 @@
   <!-- ==================== PART 3: MAIN APP (ระบบหลังบ้าน Dashboard) ==================== -->
   <div id="mainAppContainer" class="hidden min-h-screen flex flex-col md:flex-row">
 
-    <!-- แถบเมนูด้านซ้าย -->
     <aside class="w-full md:w-64 bg-white border-r border-gray-200 p-4 shrink-0 flex flex-col justify-between">
       <div>
         <div class="flex items-center gap-3 px-3 py-4 border-b border-gray-100 mb-4">
@@ -313,7 +321,6 @@
 
     <main class="flex-1 p-4 md:p-8 overflow-y-auto">
 
-      <!-- 1. แท็บฟอร์มบันทึกข้อมูล (Admin Only) -->
       <section id="tab-form" class="tab-content hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">บันทึกข้อมูลผู้บริจาค</h2>
@@ -378,7 +385,6 @@
         </div>
       </section>
 
-      <!-- 2. แท็บยอดรวม & รายการ -->
       <section id="tab-total" class="tab-content space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-emerald-600 text-white p-6 rounded-2xl shadow-sm flex justify-between items-center">
@@ -435,7 +441,6 @@
         </div>
       </section>
 
-      <!-- 3. แท็บ 5 อันดับสูงสุด (Admin Only) -->
       <section id="tab-top5" class="tab-content hidden space-y-6">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b bg-gray-50">
@@ -454,7 +459,6 @@
         </div>
       </section>
 
-      <!-- 4. แท็บสถิติและเปรียบเทียบ (Admin Only) -->
       <section id="tab-charts" class="tab-content hidden space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
@@ -472,7 +476,6 @@
         </div>
       </section>
 
-      <!-- 5. แท็บตั้งค่าระบบ (Admin Settings Tab) -->
       <section id="tab-settings" class="tab-content hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 max-w-2xl">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3 flex items-center gap-2">
@@ -599,7 +602,6 @@
       defaultPurpose: "สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์"
     };
 
-    // Navigation & Modal UI Controls
     function openAuthModal(mode) {
       document.getElementById('authContainer').classList.remove('hidden');
       switchAuthMode(mode);
@@ -671,7 +673,6 @@
       }
     }
 
-    // System Settings Listener
     settingsRef.on('value', snap => {
       if (snap.exists()) {
         systemSettings = { ...systemSettings, ...snap.val() };
@@ -697,7 +698,6 @@
         .catch(err => alert("เกิดข้อผิดพลาด: " + err.message));
     });
 
-    // Auth Login/Signup Logic
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const u = document.getElementById('loginUsername').value.trim();
@@ -769,7 +769,6 @@
       document.getElementById('loginPassword').value = p;
     });
 
-    // Data Helpers
     function updateNextTxnRef(items) {
       let maxNum = 0;
       items.forEach(item => {
@@ -802,7 +801,6 @@
       });
     }
 
-    // Donation Form Submit
     document.getElementById('donationForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
@@ -904,7 +902,6 @@
       }
     });
 
-    // Real-time Database Listener
     function listenToDatabase() {
       recordsRef.on('value', snapshot => {
         recordsData = snapshot.val() || {};
