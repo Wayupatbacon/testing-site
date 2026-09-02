@@ -15,6 +15,12 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
   <!-- Tesseract.js สำหรับ OCR สแกนสลิป -->
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <!-- SheetJS สำหรับอ่านไฟล์ CSV/XLSX (ระบบแยกยอดบริจาค) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- html2canvas + jsPDF + JSZip สำหรับสร้าง/ดาวน์โหลดใบเสร็จ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <!-- Google Fonts Sarabun -->
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -432,6 +438,9 @@
           <button onclick="switchTab('tab-settings')" id="btn-tab-settings" class="admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hover:bg-gray-50">
             ⚙️ <span>ตั้งค่าระบบ (Admin)</span>
           </button>
+          <button onclick="switchTab('tab-split')" id="btn-tab-split" class="admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hover:bg-gray-50">
+            ✂️ <span>แยกยอดบริจาค (Split)</span>
+          </button>
         </nav>
       </div>
 
@@ -651,6 +660,89 @@
         </div>
       </section>
 
+      <!-- ==================== TAB: แยกยอดบริจาค (Split Donation) ==================== -->
+      <section id="tab-split" class="tab-content hidden space-y-6">
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">ระบบแยกยอดบริจาค (Split Donation)</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">เลข Transaction สลิปแม่ (Parent Ref)</label>
+              <input type="text" id="parentTranRef" placeholder="เช่น TXN-000123" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">อัปโหลดไฟล์สลิปแม่ (ภาพรวม)</label>
+              <input type="file" id="parentSlipFile" accept="image/*" class="w-full px-3 py-1.5 border rounded-lg text-sm bg-white file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 outline-none">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-gray-600 mb-1">นำเข้ารายชื่อจากไฟล์ (.csv / .xlsx)</label>
+              <input type="file" id="importFile" accept=".csv,.xlsx,.xls" onchange="handleImportFile(event)" class="w-full px-3 py-1.5 border rounded-lg text-sm bg-white file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 outline-none">
+              <p class="text-[11px] text-gray-400 mt-1">ลำดับคอลัมน์ในไฟล์: ชื่อ-นามสกุล / เลขประจำตัว 13 หลัก / ยอดเงิน — ระบบจะข้ามแถวแรก (หัวตาราง) โดยอัตโนมัติ</p>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-gray-800 text-sm">รายการแจกแจงยอดบริจาค</h3>
+              <button type="button" onclick="addSplitRow()" class="px-3 py-1.5 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 text-xs font-bold rounded-lg transition">
+                + เพิ่มรายการ
+              </button>
+            </div>
+            <div class="overflow-x-auto border rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-gray-100 text-gray-700 font-semibold border-b">
+                  <tr>
+                    <th class="py-2 px-3 w-12 text-center">ลำดับ</th>
+                    <th class="py-2 px-3">ชื่อ-นามสกุล / หน่วยงาน</th>
+                    <th class="py-2 px-3">เลขประจำตัว 13 หลัก</th>
+                    <th class="py-2 px-3 text-right">ยอดเงิน (บาท)</th>
+                    <th class="py-2 px-3 w-16 text-center">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="splitInputBody" class="divide-y divide-gray-100">
+                  <!-- แถวข้อมูลย่อยจะถูกสร้างที่นี่ด้วย JS -->
+                </tbody>
+                <tfoot class="bg-gray-50 border-t">
+                  <tr>
+                    <td colspan="3" class="py-3 px-4 text-right font-bold text-gray-700">รวมยอดจัดสรรทั้งหมด:</td>
+                    <td class="py-3 px-3 text-right font-bold text-emerald-700 text-sm" id="splitTotalSum">0.00</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <button type="button" onclick="processSplitForm()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition flex justify-center items-center gap-2">
+            <span>⚙️ ประมวลผลและสร้างใบเสร็จแยกยอดบริจาค</span>
+          </button>
+        </div>
+
+        <div id="splitResultSection" class="hidden bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+          <div class="flex justify-between items-center mb-4 border-b pb-2">
+            <h3 class="font-bold text-gray-800">ผลการสร้างรายการ (Output Result)</h3>
+            <span id="splitStatusBadge" class="px-3 py-1 rounded-lg text-xs font-bold"></span>
+          </div>
+          <div class="overflow-x-auto border rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800 text-white font-semibold border-b">
+                <tr>
+                  <th class="py-3 px-4">Sub Ref Number</th>
+                  <th class="py-3 px-4">Child TXN</th>
+                  <th class="py-3 px-4">ชื่อผู้บริจาค</th>
+                  <th class="py-3 px-4 text-right">ยอดเงิน</th>
+                  <th class="py-3 px-4 text-center">สถานะรายการ</th>
+                </tr>
+              </thead>
+              <tbody id="splitResultBody" class="divide-y divide-gray-100 text-gray-700">
+                <!-- ข้อมูลผลลัพธ์จะออกที่นี่ -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -725,6 +817,33 @@
     </div>
   </div>
 
+  <!-- ==================== SPLIT DONATION: RECEIPT POPUP MODAL ==================== -->
+  <div id="receiptModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+        <h3 class="font-bold text-gray-800 text-lg">🧾 ใบรับบริจาค / ใบอนุโมทนา (แยกยอด)</h3>
+        <button onclick="closeReceiptModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+      </div>
+
+      <div class="px-6 pt-4 flex flex-col sm:flex-row gap-2 sm:items-center border-b border-gray-100 pb-4">
+        <input type="text" id="zipFileName" placeholder="เช่น มาซาลา" class="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+        <button id="downloadAllZipBtn" onclick="downloadAllSplitReceiptsZip()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg shadow-sm transition whitespace-nowrap">
+          📦 ดาวน์โหลดทั้งหมด (ZIP)
+        </button>
+      </div>
+
+      <div id="receiptListContainer" class="overflow-y-auto px-6 py-4 space-y-4 flex-1">
+        <!-- ใบเสร็จแต่ละใบจะถูกสร้างที่นี่ -->
+      </div>
+      <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
+        <button onclick="closeReceiptModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg transition">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- กล่องซ่อนไว้นอกจอ ใช้ render เทมเพลตใบเสร็จจริง (รูปแบบเดียวกับ PART 4) เพื่อแปลงเป็น PDF -->
+  <div id="splitReceiptRenderBox" class="text-black bg-white" style="position: fixed; left: -9999px; top: 0; width: 210mm; padding: 20mm 20mm 15mm 20mm; box-sizing: border-box;"></div>
+
   <!-- ==================== PART 5: LOGIC SCRIPT (เชื่อมต่อ Firebase & Carousel) ==================== -->
   <script>
     // CAROUSEL LOGIC
@@ -797,8 +916,6 @@
 
     // ==================== SESSION PERSISTENCE ====================
     const SESSION_KEY = 'kuDonationSession';
-    const SESSION_DURATION_MS = 10 * 60 * 1000; // บังคับออกจากระบบทุก 10 นาที
-    let sessionExpiryTimer = null;
 
     function sanitizeUserForStorage(user) {
       if (!user) return null;
@@ -811,8 +928,7 @@
       try {
         localStorage.setItem(SESSION_KEY, JSON.stringify({
           user: sanitizeUserForStorage(currentUser),
-          inApp: !!inApp,
-          loginAt: Date.now()
+          inApp: !!inApp
         }));
       } catch (err) {
         console.warn('ไม่สามารถบันทึก session ได้:', err);
@@ -821,33 +937,6 @@
 
     function clearSession() {
       try { localStorage.removeItem(SESSION_KEY); } catch (err) {}
-      if (sessionExpiryTimer) {
-        clearTimeout(sessionExpiryTimer);
-        sessionExpiryTimer = null;
-      }
-    }
-
-    // เริ่มจับเวลานับถอยหลัง แล้วบังคับ logout อัตโนมัติเมื่อครบ 10 นาทีนับจาก loginAt
-    function scheduleSessionExpiry(loginAt) {
-      if (sessionExpiryTimer) {
-        clearTimeout(sessionExpiryTimer);
-        sessionExpiryTimer = null;
-      }
-      const elapsed = Date.now() - loginAt;
-      const remaining = SESSION_DURATION_MS - elapsed;
-
-      if (remaining <= 0) {
-        forceSessionExpire();
-        return;
-      }
-
-      sessionExpiryTimer = setTimeout(forceSessionExpire, remaining);
-    }
-
-    function forceSessionExpire() {
-      if (!currentUser) return;
-      logout();
-      alert('เซสชันของคุณหมดอายุ (ครบ 10 นาที) กรุณาเข้าสู่ระบบใหม่อีกครั้ง');
     }
 
     function restoreSession() {
@@ -859,15 +948,7 @@
       }
       if (!saved || !saved.user) return;
 
-      // เซสชันเก่า (ก่อนมี loginAt) หรือหมดอายุแล้ว ให้เคลียร์ทิ้งและไม่ restore
-      const loginAt = saved.loginAt || 0;
-      if (!loginAt || Date.now() - loginAt >= SESSION_DURATION_MS) {
-        clearSession();
-        return;
-      }
-
       currentUser = saved.user;
-      scheduleSessionExpiry(loginAt);
 
       if (saved.inApp) {
         startApp();
@@ -940,7 +1021,6 @@
       closeAuthModal(); 
       syncHeaderNav();
       saveSession(false);
-      scheduleSessionExpiry(Date.now());
     }
 
     function backToHome() {
@@ -1516,6 +1596,342 @@
       document.getElementById('p-amount-thai').innerText = thaiBahtText(Number(item.amount));
 
       window.print();
+    }
+
+    // ==================== SPLIT DONATION (แยกยอดบริจาค) ====================
+    let splitRowCount = 0;
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    function addSplitRow(prefill = {}) {
+      splitRowCount++;
+      const tbody = document.getElementById('splitInputBody');
+      const tr = document.createElement('tr');
+      tr.id = `splitRow_${splitRowCount}`;
+      const amountVal = prefill.amount !== undefined && prefill.amount !== '' && !isNaN(parseFloat(prefill.amount))
+        ? parseFloat(prefill.amount)
+        : '';
+      tr.innerHTML = `
+        <td class="py-2 px-3 text-center text-gray-500 font-mono"></td>
+        <td class="py-2 px-3">
+          <input type="text" class="split-name w-full px-2 py-1.5 border rounded text-xs focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="ชื่อ-นามสกุล" value="${escapeHtml(prefill.name || '')}">
+        </td>
+        <td class="py-2 px-3">
+          <input type="text" maxlength="13" class="split-tax w-full px-2 py-1.5 border rounded text-xs font-mono focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="เลข 13 หลัก" value="${escapeHtml(prefill.taxId || '')}">
+        </td>
+        <td class="py-2 px-3">
+          <input type="number" step="0.01" oninput="calculateSplitTotal()" class="split-amount w-full px-2 py-1.5 border rounded text-xs text-right focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="0.00" value="${amountVal}">
+        </td>
+        <td class="py-2 px-3 text-center">
+          <button type="button" onclick="removeSplitRow('${tr.id}')" class="text-red-400 hover:text-red-600 hover:bg-red-50 p-1.5 rounded transition">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      updateRowNumbers();
+      calculateSplitTotal();
+    }
+
+    function removeSplitRow(rowId) {
+      const row = document.getElementById(rowId);
+      if (row) row.remove();
+      updateRowNumbers();
+      calculateSplitTotal();
+    }
+
+    function updateRowNumbers() {
+      document.querySelectorAll('#splitInputBody tr').forEach((row, index) => {
+        row.querySelector('td:first-child').innerText = index + 1;
+      });
+    }
+
+    function calculateSplitTotal() {
+      let total = 0;
+      document.querySelectorAll('.split-amount').forEach(input => {
+        total += parseFloat(input.value) || 0;
+      });
+      const el = document.getElementById('splitTotalSum');
+      if (el) el.innerText = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return total;
+    }
+
+    // ---------- นำเข้าไฟล์ CSV / XLSX ----------
+    function handleImportFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: '' });
+
+          // ข้ามแถวหัวตาราง (แถวที่ 1 / index 0)
+          const dataRows = rows.slice(1).filter(r => r && r.some(cell => String(cell).trim() !== ''));
+
+          if (dataRows.length === 0) {
+            alert('ไม่พบข้อมูลในไฟล์ (นอกเหนือจากหัวตาราง)');
+            return;
+          }
+
+          document.getElementById('splitInputBody').innerHTML = '';
+          splitRowCount = 0;
+
+          dataRows.forEach(r => {
+            addSplitRow({
+              name: r[0] !== undefined ? String(r[0]).trim() : '',
+              taxId: r[1] !== undefined ? String(r[1]).trim() : '',
+              amount: r[2] !== undefined ? String(r[2]).trim() : ''
+            });
+          });
+
+          calculateSplitTotal();
+          alert(`นำเข้าข้อมูลสำเร็จ ${dataRows.length} รายการ`);
+        } catch (err) {
+          console.error(err);
+          alert('เกิดข้อผิดพลาดในการอ่านไฟล์ กรุณาตรวจสอบว่าเป็นไฟล์ .csv หรือ .xlsx ที่ถูกต้อง');
+        } finally {
+          event.target.value = '';
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // ---------- ประมวลผลรายการ + เตรียมข้อมูลใบเสร็จ ----------
+    let splitReceipts = [];
+
+    function processSplitForm() {
+      const parentRef = document.getElementById('parentTranRef').value.trim() || 'REF-AUTO';
+      const totalSplitAmount = calculateSplitTotal();
+      const rows = document.querySelectorAll('#splitInputBody tr');
+
+      if (rows.length === 0) {
+        alert("กรุณาเพิ่มรายการแจกแจงยอดอย่างน้อย 1 รายการ");
+        return;
+      }
+      if (totalSplitAmount <= 0) {
+        alert("ยอดรวมจัดสรรต้องมากกว่า 0");
+        return;
+      }
+
+      const parentTxnNum = "TXN-" + String(Math.floor(Math.random() * 900000) + 100000);
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const resultBody = document.getElementById('splitResultBody');
+      resultBody.innerHTML = '';
+      splitReceipts = [];
+
+      rows.forEach((row, index) => {
+        const name = row.querySelector('.split-name').value.trim() || 'ไม่ระบุชื่อ';
+        const taxId = row.querySelector('.split-tax').value.trim();
+        const amount = parseFloat(row.querySelector('.split-amount').value) || 0;
+
+        const subRefNum = `${parentRef}-${String(index + 1).padStart(3, '0')}`;
+        const childTxnNum = `${parentTxnNum}-${index + 1}`;
+        const childStatusText = `กระจายยอดจาก ${parentTxnNum}`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-3 px-4 font-mono text-indigo-700">${escapeHtml(subRefNum)}</td>
+          <td class="py-3 px-4 font-mono">${escapeHtml(childTxnNum)}</td>
+          <td class="py-3 px-4">${escapeHtml(name)}</td>
+          <td class="py-3 px-4 text-right font-semibold text-emerald-600">${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+          <td class="py-3 px-4 text-center">
+            <span class="inline-block bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2 py-1 rounded-full">${escapeHtml(childStatusText)}</span>
+          </td>
+        `;
+        resultBody.appendChild(tr);
+
+        splitReceipts.push({
+          ref: subRefNum,
+          childTxnNum,
+          date: dateStr,
+          time: timeStr,
+          name,
+          taxId,
+          address: '-',
+          purpose: systemSettings.defaultPurpose || 'สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์',
+          amountText: amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }),
+          amountThai: thaiBahtText(amount)
+        });
+      });
+
+      const statusBadge = document.getElementById('splitStatusBadge');
+      statusBadge.className = "px-3 py-1 rounded-lg text-xs font-bold bg-green-100 text-green-700";
+      statusBadge.innerText = "✅ ดำเนินการสำเร็จ";
+
+      const resultSection = document.getElementById('splitResultSection');
+      resultSection.classList.remove('hidden');
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      document.getElementById('zipFileName').value = `ใบเสร็จ-${parentRef}`;
+      openReceiptModal();
+    }
+
+    // ---------- Popup รายการใบเสร็จ ----------
+    function buildReceiptPreviewCard(receipt, index) {
+      return `
+        <div class="border border-dashed border-gray-300 rounded-xl p-5 bg-gray-50">
+          <div class="flex justify-between items-start mb-3 pb-3 border-b border-gray-200">
+            <div>
+              <p class="font-bold text-emerald-700 text-sm">${escapeHtml(systemSettings.foundationName || 'มูลนิธิโรงพยาบาลเกษตรศาสตร์')}</p>
+              <p class="text-[11px] text-gray-500">ใบรับบริจาค / ใบอนุโมทนา</p>
+            </div>
+            <button onclick="downloadSplitReceipt(${index})" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold rounded-lg transition whitespace-nowrap">
+              ⬇️ ดาวน์โหลด PDF
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-y-1.5 text-xs text-gray-700">
+            <span class="text-gray-500">เลขที่อ้างอิง (Sub Ref)</span>
+            <span class="font-mono text-right text-indigo-700">${escapeHtml(receipt.ref)}</span>
+            <span class="text-gray-500">Child TXN</span>
+            <span class="font-mono text-right">${escapeHtml(receipt.childTxnNum)}</span>
+            <span class="text-gray-500">ชื่อผู้บริจาค</span>
+            <span class="text-right font-semibold">${escapeHtml(receipt.name)}</span>
+            ${receipt.taxId ? `<span class="text-gray-500">เลขประจำตัว 13 หลัก</span><span class="font-mono text-right">${escapeHtml(receipt.taxId)}</span>` : ''}
+            <span class="text-gray-500">วันที่ออกใบเสร็จ</span>
+            <span class="text-right">${escapeHtml(receipt.date)} ${escapeHtml(receipt.time)} น.</span>
+          </div>
+          <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+            <span class="text-xs font-semibold text-gray-600">ยอดเงินบริจาค</span>
+            <span class="text-base font-bold text-emerald-600">${escapeHtml(receipt.amountText)} บาท</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function openReceiptModal() {
+      const container = document.getElementById('receiptListContainer');
+      container.innerHTML = splitReceipts.map((r, i) => buildReceiptPreviewCard(r, i)).join('');
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    document.getElementById('receiptModal').addEventListener('click', (e) => {
+      if (e.target.id === 'receiptModal') closeReceiptModal();
+    });
+
+    // ---------- สร้างใบเสร็จรูปแบบทางการ (เหมือน PART 4) แล้วแปลงเป็น PDF ----------
+    function buildOfficialReceiptHTML(data) {
+      return `
+        <div class="text-center mb-6">
+          <div class="flex justify-center mb-1">
+            <img src="https://i.ibb.co/3mfxw0Jc/Screenshot-2026-09-01-232358.png" alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" class="h-32 w-auto object-contain">
+          </div>
+          <h1 class="text-2xl font-bold mt-2 text-gray-900 tracking-wider">ใบรับบริจาค / ใบอนุโมทนา</h1>
+          <div class="w-full border-b-2 border-gray-800 mt-2"></div>
+        </div>
+        <div class="flex justify-between items-start text-sm leading-relaxed mb-6">
+          <div>
+            <h2 class="font-bold text-base text-gray-900">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</h2>
+            <p class="text-xs text-gray-600">มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร<br>กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900</p>
+            <p class="text-xs text-gray-600 mt-1">เลขที่หน่วยรับบริจาค: <span class="font-mono">XXXXXXXXXXXX</span></p>
+          </div>
+          <div class="text-right">
+            <p><strong>เลขที่อ้างอิง:</strong> <span class="font-mono font-bold">${escapeHtml(data.ref)}</span></p>
+            <p><strong>วันที่:</strong> ${escapeHtml(data.date)}</p>
+            <p><strong>เวลา:</strong> ${escapeHtml(data.time)} น.</p>
+          </div>
+        </div>
+        <div class="space-y-4 text-sm mt-6">
+          <div class="flex justify-between">
+            <p class="w-1/2"><strong>ชื่อผู้บริจาค:</strong> <span class="font-semibold">${escapeHtml(data.name)}</span></p>
+            <p class="w-1/2"><strong>เลขประจำตัวผู้เสียภาษีอากร/บัตรประชาชน:</strong> <span class="font-mono">${escapeHtml(data.taxId || '-')}</span></p>
+          </div>
+          <div class="flex justify-between">
+            <p class="w-full"><strong>ที่อยู่:</strong> ${escapeHtml(data.address || '-')}</p>
+          </div>
+          <div class="pt-2">
+            <p><strong>บริจาคเงินเพื่อ:</strong> <span class="border-b border-dotted border-gray-500 pb-1 inline-block w-3/4">${escapeHtml(data.purpose)}</span></p>
+          </div>
+          <div class="text-center py-5 space-y-1">
+            <p class="text-base">จำนวนเงิน: <span class="text-xl font-bold px-2">${escapeHtml(data.amountText)}</span> บาท</p>
+            <p class="text-gray-700">( <span class="font-semibold">${escapeHtml(data.amountThai)}</span> )</p>
+          </div>
+        </div>
+      `;
+    }
+
+    async function renderReceiptCanvas(data) {
+      const box = document.getElementById('splitReceiptRenderBox');
+      box.innerHTML = buildOfficialReceiptHTML(data);
+
+      const imgs = box.querySelectorAll('img');
+      await Promise.all(Array.from(imgs).map(img => img.complete
+        ? Promise.resolve()
+        : new Promise(res => { img.onload = res; img.onerror = res; })));
+
+      return await html2canvas(box, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    }
+
+    async function receiptCanvasToPdfBlob(canvas) {
+      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = (canvas.height * pageWidth) / canvas.width;
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pageWidth, pageHeight);
+      return pdf;
+    }
+
+    async function downloadSplitReceipt(index) {
+      const data = splitReceipts[index];
+      if (!data) return;
+      try {
+        const canvas = await renderReceiptCanvas(data);
+        const pdf = await receiptCanvasToPdfBlob(canvas);
+        pdf.save(`${data.ref}.pdf`);
+      } catch (err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการสร้าง PDF');
+      }
+    }
+
+    async function downloadAllSplitReceiptsZip() {
+      if (splitReceipts.length === 0) {
+        alert('ไม่มีรายการใบเสร็จให้ดาวน์โหลด');
+        return;
+      }
+      let zipName = document.getElementById('zipFileName').value.trim();
+      if (!zipName) zipName = 'มาซาลา';
+
+      const btn = document.getElementById('downloadAllZipBtn');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = '⏳ กำลังสร้างไฟล์...';
+
+      try {
+        const zip = new JSZip();
+        for (const data of splitReceipts) {
+          const canvas = await renderReceiptCanvas(data);
+          const pdf = await receiptCanvasToPdfBlob(canvas);
+          const blob = pdf.output('blob');
+          zip.file(`${data.ref}.pdf`, blob);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${zipName}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการสร้างไฟล์ ZIP');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
     }
 
     restoreSession();
