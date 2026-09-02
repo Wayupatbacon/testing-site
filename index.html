@@ -59,7 +59,7 @@
             
             <div class="h-6 w-[1px] bg-gray-300"></div>
 
-            <!-- โลโก้มมหาวิทยาลัยเกษตรศาสตร์ -->
+            <!-- โลโก้มหาวิทยาลัยเกษตรศาสตร์ -->
             <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
                  alt="โลโก้มหาวิทยาลัยเกษตรศาสตร์" 
                  class="h-9 w-auto object-contain">
@@ -77,7 +77,7 @@
           <!-- ปุ่มโปรไฟล์ (ซ่อนไว้ก่อน จะแสดงตอนล็อกอินแล้ว) กดเพื่อเข้าแดชบอร์ด -->
           <button id="userProfileNavBtn" onclick="startApp()" class="hidden flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-full transition-colors group">
             <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold" id="headerUserAvatar">U</div>
-            <span id="headerUserName" class="font-medium text-sm text-emerald-800 pr-1">ชื่อผู้ใช้งาน / ประวัติ</span>
+            <span class="font-medium text-sm text-emerald-800 pr-1"><span id="headerUserName">ชื่อผู้ใช้งาน</span> / ประวัติ</span>
           </button>
 
           <button onclick="handleDonateClick()" class="px-4 py-2 text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-md transition">ร่วมบริจาค</button>
@@ -107,6 +107,7 @@
           และพัฒนาอาคารโรงพยาบาลเพื่อสังคมและสร้างโอกาศทางการศึกษาเพื่อสังคมไทย
         </p>
 
+        <!-- ปุ่มร่วมบริจาค ปรับ gap-1.5 เพื่อให้ตัวอักษรและไอคอนใกล้กันขึ้น -->
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
           <button onclick="handleDonateClick()" class="w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-bold px-8 py-3 rounded-2xl shadow-xl shadow-emerald-200/80 transition-all transform hover:-translate-y-1 active:translate-y-0 inline-flex items-center justify-center gap-1.5">
             <span>ร่วมบริจาคสมทบทุน</span>
@@ -132,6 +133,7 @@
         </div>
 
         <div class="relative w-full rounded-3xl overflow-hidden shadow-lg border border-gray-100 group aspect-[16/9] md:aspect-[21/9] max-h-[480px]">
+          <!-- Slide Container -->
           <div id="bannerCarousel" class="flex h-full transition-transform duration-700 ease-in-out">
             <div class="w-full h-full flex-shrink-0">
               <img src="https://lh3.googleusercontent.com/d/1yVInYFexxLHBJb9x8pJlP4pshs_pzuaB" alt="Banner 1" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?q=80&w=1000&auto=format&fit=crop'">
@@ -147,6 +149,7 @@
             </div>
           </div>
 
+          <!-- Indicators / Dots -->
           <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2.5 z-10 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full">
             <button onclick="goToSlide(0)" class="banner-dot w-3 h-3 rounded-full bg-white transition-all duration-300" aria-label="Slide 1"></button>
             <button onclick="goToSlide(1)" class="banner-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all duration-300" aria-label="Slide 2"></button>
@@ -162,6 +165,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
+          <!-- ฝั่งซ้าย: รูปภาพอาคารโรงพยาบาล -->
           <div class="lg:col-span-5">
             <div class="sticky top-24 rounded-3xl overflow-hidden shadow-xl border border-gray-100">
               <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
@@ -170,10 +174,13 @@
             </div>
           </div>
 
+          <!-- ฝั่งขวา: รายการช่องทางการบริจาค (Accordion) -->
           <div class="lg:col-span-7 space-y-6">
             <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">ช่องทางการบริจาค</h2>
 
             <div class="space-y-4">
+              
+              <!-- 01 บริจาคผ่านบัญชีธนาคาร -->
               <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200" open>
                 <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
                   <div class="flex items-center gap-4">
@@ -193,6 +200,7 @@
                 </div>
               </details>
 
+              <!-- 02 บริจาคด้วยตนเอง (Walk-in) -->
               <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200">
                 <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
                   <div class="flex items-center gap-4">
@@ -208,6 +216,7 @@
                 </div>
               </details>
 
+              <!-- 03 เพิ่มเติม -->
               <details class="group bg-gray-50 rounded-2xl border border-gray-200/80 overflow-hidden transition-all duration-200" open>
                 <summary class="p-5 font-bold text-gray-800 cursor-pointer flex items-center justify-between text-base select-none hover:bg-gray-100/60">
                   <div class="flex items-center gap-4">
@@ -221,17 +230,20 @@
                     การขอรับใบเสร็จรับเงินบริจาค กรุณาส่งหลักฐานใบนำฝากธนาคาร (สลิปโอนเงิน) 
                     พร้อม ชื่อ-สกุล, วัน/เดือน/ปีเกิด, ที่อยู่, หมายเลขโทรศัพท์ และเลขบัตรประจำตัวประชาชน 13 หลัก
                   </p>
+
                   <div class="space-y-1.5 font-medium text-gray-700">
                     <p class="font-bold text-gray-900">ส่งผ่านทาง</p>
                     <p>E-mail: <a href="mailto:office@kuhospitalfoundation.org" class="text-emerald-700 hover:underline">office@kuhospitalfoundation.org</a></p>
                     <p>โทรศัพท์: <span class="font-mono">02-579-0113</span></p>
                     <p>ไปรษณีย์: <strong>มูลนิธิโรงพยาบาลเกษตรศาสตร์</strong> มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพฯ 10900</p>
                   </div>
+
                   <p class="text-xs text-gray-500 pt-2 border-t border-gray-200/60">
                     การบริจาคเพื่อลดหย่อนภาษี 2 เท่า ผู้บริจาคยินยอมให้เลขบัตรประจำตัวประชาชน เพื่อนำส่งระบบ e-Donation กรณีไม่สะดวกให้เลขบัตรประจำตัวประชาชน ใบเสร็จจะลดหย่อนภาษีได้ 1 เท่า
                   </p>
                 </div>
               </details>
+
             </div>
           </div>
 
@@ -254,6 +266,7 @@
               สามารถนำไปลดหย่อนภาษีได้ตามที่กฎหมายกำหนดผ่านระบบ e-Donation ของกรมสรรพากร หรือใช้ใบเสร็จรับเงิน/ใบอนุโมทนาบัตรที่ออกโดยมูลนิธิฯ
             </p>
           </details>
+
           <details class="group bg-gray-50 p-4 rounded-2xl border border-gray-100">
             <summary class="font-bold text-gray-800 cursor-pointer flex justify-between items-center text-sm">
               ช่องทางการบริจาคเงินรองรับแบบใดบ้าง?
@@ -263,6 +276,7 @@
               รองรับทั้งการโอนเงินออนไลน์ (Online) ผ่าน Mobile Banking และการบริจาคผ่านช่องทางออฟไลน์ (Offline)
             </p>
           </details>
+
           <details class="group bg-gray-50 p-4 rounded-2xl border border-gray-100">
             <summary class="font-bold text-gray-800 cursor-pointer flex justify-between items-center text-sm">
               ตรวจสอบประวัติการบริจาคย้อนหลังได้อย่างไร?
@@ -287,19 +301,23 @@
             <p class="text-xs leading-relaxed text-slate-400">
               📍 มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900
             </p>
+            
             <div class="pt-2 flex items-center gap-4">
               <img src="https://lh3.googleusercontent.com/d/1_rZkQuKr38kghxZGzoztaYPOpeDyLPmZ" 
                    alt="โลโก้มหาวิทยาลัยเกษตรศาสตร์" 
                    class="h-28 w-auto object-contain">
+              
               <img src="https://lh3.googleusercontent.com/d/1T7STTLTFGFjfRZC6hijpVVu7rn_jhJeW" 
                    alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" 
                    class="h-24 w-auto object-contain">
             </div>
           </div>
+
           <div class="space-y-4">
             <h4 class="font-bold text-emerald-400 text-base">ช่องทางติดต่อ</h4>
             <p class="text-xs">📞 <strong>โทรศัพท์:</strong> 02 579 0113</p>
             <p class="text-xs">✉️ <strong>อีเมล:</strong> office@kuhospitalfoundation.org</p>
+            
             <div class="pt-2">
               <a href="https://www.facebook.com/kuhospitalfoundation" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition duration-200">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -316,6 +334,7 @@
         </div>
       </div>
     </footer>
+
   </div>
 
   <!-- ==================== PART 2: AUTH MODAL (Login / Signup Popup) ==================== -->
@@ -336,6 +355,7 @@
         <button id="tabBtnSignup" onclick="switchAuthMode('signup')" class="w-1/2 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition">ลงทะเบียน (ผู้บริจาค)</button>
       </div>
 
+      <!-- Login Form -->
       <form id="loginForm" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อผู้ใช้ / อีเมล</label>
@@ -350,6 +370,7 @@
         </button>
       </form>
 
+      <!-- Signup Form -->
       <form id="signupForm" class="space-y-3 hidden">
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">อีเมล / Username</label>
@@ -387,6 +408,8 @@
               <p class="text-[10px] text-gray-500">ม.เกษตรศาสตร์</p>
             </div>
           </div>
+          
+          <!-- ไอคอนกลับหน้าแรก -->
           <button onclick="backToHome()" class="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors shadow-sm border border-transparent hover:border-emerald-100" title="กลับหน้าแรก">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -395,9 +418,11 @@
         </div>
 
         <nav class="space-y-1">
+          <!-- ปุ่มร่วมบริจาคใหม่ (กดแล้วเรียก Popup) -->
           <button onclick="openDonationModal()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold rounded-xl text-left bg-emerald-600 text-white hover:bg-emerald-700 shadow-md mb-3 transition">
             💖 <span>ร่วมบริจาค (สแกน & ส่งสลิป)</span>
           </button>
+
           <button onclick="switchTab('tab-form')" id="btn-tab-form" class="admin-only menu-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl text-left text-gray-600 hover:bg-gray-50">
             📝 <span>บันทึกรายการบริจาค</span>
           </button>
@@ -435,7 +460,6 @@
 
     <main class="flex-1 p-4 md:p-8 overflow-y-auto">
 
-      <!-- ==================== TAB: บันทึกข้อมูลผู้บริจาค ==================== -->
       <section id="tab-form" class="tab-content hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">บันทึกข้อมูลผู้บริจาค</h2>
@@ -500,7 +524,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB: ยอดรวม & รายการ ==================== -->
       <section id="tab-total" class="tab-content space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="bg-emerald-600 text-white p-6 rounded-2xl shadow-sm flex justify-between items-center">
@@ -557,7 +580,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB: 5 อันดับสูงสุด ==================== -->
       <section id="tab-top5" class="tab-content hidden space-y-6">
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b bg-gray-50">
@@ -576,7 +598,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB: สถิติ ==================== -->
       <section id="tab-charts" class="tab-content hidden space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
@@ -594,7 +615,6 @@
         </div>
       </section>
 
-      <!-- ==================== TAB: ตั้งค่าระบบ ==================== -->
       <section id="tab-settings" class="tab-content hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 max-w-2xl">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3 flex items-center gap-2">
@@ -606,6 +626,7 @@
               <input type="text" id="cfgReceiverKeywords" required placeholder="เช่น มูลนิธิโรงพยาบาลเกษตรศาสตร์, ม.เกษตรศาสตร์" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
               <p class="text-[11px] text-gray-500 mt-1">คั่นด้วยเครื่องหมายจุลภาค (,) หากสลิปไม่มีคำเหล่านี้ ระบบจะแจ้งเตือนและไม่อนุญาตให้บันทึก</p>
             </div>
+
             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
               <div>
                 <p class="text-sm font-semibold text-gray-800">เปิดระบบตรวจจับ สลิปซ้ำ (Duplicate Slip Prevention)</p>
@@ -613,6 +634,7 @@
               </div>
               <input type="checkbox" id="cfgCheckDuplicate" class="w-5 h-5 accent-emerald-600 rounded">
             </div>
+
             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border">
               <div>
                 <p class="text-sm font-semibold text-gray-800">เปิดระบบตรวจสอบชื่อผู้รับด้วย OCR (Verify Receiver Name)</p>
@@ -620,14 +642,17 @@
               </div>
               <input type="checkbox" id="cfgCheckReceiver" class="w-5 h-5 accent-emerald-600 rounded">
             </div>
+
             <div>
               <label class="block text-xs font-semibold text-gray-700 mb-1">หัวเรื่องหน่วยงานบนใบเสร็จ (Receipt Header)</label>
               <input type="text" id="cfgFoundationName" required placeholder="มูลนิธิโรงพยาบาลเกษตรศาสตร์" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
             </div>
+
             <div>
               <label class="block text-xs font-semibold text-gray-700 mb-1">วัตถุประสงค์เริ่มต้น (Default Purpose)</label>
               <input type="text" id="cfgDefaultPurpose" required placeholder="สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
             </div>
+
             <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow-sm transition">
               💾 บันทึกการตั้งค่า
             </button>
@@ -637,8 +662,10 @@
 
       <!-- ==================== TAB: แยกยอดบริจาค (Split Donation) ==================== -->
       <section id="tab-split" class="tab-content hidden space-y-6">
+
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">ระบบแยกยอดบริจาค (Split Donation)</h2>
+
           <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-2">
             <label class="block text-xs font-semibold text-gray-600 mb-1">เลข Transaction สลิปแม่ (Parent Ref)</label>
             <div class="flex gap-2">
@@ -648,6 +675,7 @@
               </button>
             </div>
             <p class="text-[11px] text-gray-400 mt-1">ระบบจะดึงข้อมูลจากชีต "Folk Request" ที่ซิงก์ไว้บน Firebase โดยอัตโนมัติด้วยเลขอ้างอิงนี้</p>
+
             <p id="parentInfoError" class="hidden mt-2 text-xs font-semibold text-red-600">-</p>
 
             <div id="parentInfoCard" class="hidden mt-3 bg-white border border-emerald-200 rounded-xl p-4 text-xs text-gray-700 space-y-1.5">
@@ -783,9 +811,12 @@
   <!-- ==================== DONATION POPUP MODAL ==================== -->
   <div id="donationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm">
     <div class="bg-white p-6 rounded-3xl shadow-2xl w-full max-w-md border border-slate-100 relative text-center">
+      <!-- ปุ่มปิด Modal -->
       <button onclick="closeDonationModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold transition">✕</button>
+      
       <h2 class="text-2xl font-extrabold text-emerald-700 mb-4">ร่วมบริจาค</h2>
       
+      <!-- รูปภาพ QR Code / สลิป จาก Google Drive -->
       <div class="bg-gray-50 p-2 rounded-2xl border border-gray-100 mb-4">
         <img src="https://lh3.googleusercontent.com/d/1HQqgI9pSjW6MuZAUuHRVmbxogr2Chr6N" 
              alt="สแกนเพื่อร่วมบริจาค" 
@@ -797,6 +828,7 @@
         กรุณาส่งข้อมูลสลิปผ่านฟอร์มด้านล่างนี้
       </p>
       
+      <!-- ปุ่มลิงก์ไป Google Forms -->
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSc9Rd925rRVOeYW_Su0OXHwbuEL0TuWdfqSvCJSvKaS0A8r3Q/viewform?usp=sharing&ouid=105409320723938219233" 
          target="_blank" 
          rel="noopener noreferrer" 
@@ -822,6 +854,7 @@
       </div>
 
       <div id="receiptListContainer" class="overflow-y-auto px-6 py-4 space-y-4 flex-1">
+        <!-- ใบเสร็จแต่ละใบจะถูกสร้างที่นี่ -->
       </div>
       <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
         <button onclick="closeReceiptModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold rounded-lg transition">ปิดหน้าต่าง</button>
@@ -829,6 +862,7 @@
     </div>
   </div>
 
+  <!-- กล่องซ่อนไว้นอกจอ ใช้ render เทมเพลตใบเสร็จจริง (รูปแบบเดียวกับ PART 4) เพื่อแปลงเป็น PDF -->
   <div id="splitReceiptRenderBox" class="text-black bg-white" style="position: fixed; left: -9999px; top: 0; width: 210mm; padding: 20mm 20mm 15mm 20mm; box-sizing: border-box;"></div>
 
   <!-- ==================== PART 5: LOGIC SCRIPT (เชื่อมต่อ Firebase & Carousel) ==================== -->
@@ -901,6 +935,7 @@
     let monthlyChartInstance = null;
     let nextTxnNumber = "TXN-000001";
 
+    // ==================== SESSION PERSISTENCE ====================
     const SESSION_KEY = 'kuDonationSession';
 
     function sanitizeUserForStorage(user) {
@@ -916,7 +951,9 @@
           user: sanitizeUserForStorage(currentUser),
           inApp: !!inApp
         }));
-      } catch (err) {}
+      } catch (err) {
+        console.warn('ไม่สามารถบันทึก session ได้:', err);
+      }
     }
 
     function clearSession() {
@@ -945,8 +982,7 @@
       if (!currentUser) return;
       document.getElementById('loginNavBtn').classList.add('hidden');
       document.getElementById('userProfileNavBtn').classList.remove('hidden');
-      // เพิ่ม " / ประวัติ" ต่อท้ายชื่ออัตโนมัติตามจุดประสงค์
-      document.getElementById('headerUserName').innerText = currentUser.fullName + " / ประวัติ";
+      document.getElementById('headerUserName').innerText = currentUser.fullName;
       document.getElementById('headerUserAvatar').innerText = currentUser.fullName.charAt(0).toUpperCase();
     }
 
@@ -958,6 +994,7 @@
       defaultPurpose: "สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์"
     };
 
+    // Donation Popup Modal Functions
     function openDonationModal() {
       document.getElementById('donationModal').classList.remove('hidden');
     }
@@ -966,6 +1003,10 @@
       document.getElementById('donationModal').classList.add('hidden');
     }
 
+    // FIX: ปุ่ม "ร่วมบริจาค" บน landing page/header เดิมเรียก openAuthModal('signup') ตรงๆ
+    // ทำให้แม้ login แล้วก็ยังเด้งไปหน้า login/signup อยู่ดี
+    // ฟังก์ชันนี้เช็คสถานะ login ก่อน ถ้า login แล้วให้เปิด popup บริจาคทันที
+    // ถ้ายังไม่ login ค่อยเปิดหน้า signup ตามเดิม
     function handleDonateClick() {
       if (currentUser) {
         openDonationModal();
@@ -1030,12 +1071,53 @@
       } else {
         document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
         document.getElementById('userPersonalCard').classList.remove('hidden');
-        document.getElementById('tableHeaderTitle').innerText = `ประวัติการบริจาคของคุณ (${currentUser.fullName})`;         document.getElementById('labelTabTotal').innerText = "ประวัติการบริจาคของฉัน";         switchTab('tab-total');       }        listenToDatabase();     }      function logout() {       recordsRef.off('value');       currentUser = null;       clearSession();        document.getElementById('mainAppContainer').classList.add('hidden');       document.getElementById('landingPage').classList.remove('hidden');       document.getElementById('loginForm').reset();              document.getElementById('loginNavBtn').classList.remove('hidden');       document.getElementById('userProfileNavBtn').classList.add('hidden');     }      function switchTab(tabId) {       // ฟังก์ชันนี้ได้จำกัดสิทธิ์หน้าอื่นๆ ให้เฉพาะแอดมินไว้อย่างรัดกุมแล้ว (ยกเว้นแค่ประวัติส่วนบุคคล - tab-total)       const adminTabs = ['tab-form', 'tab-top5', 'tab-charts', 'tab-settings', 'tab-split'];          if (adminTabs.includes(tabId)) {         if (!currentUser \vert{}\vert{} currentUser.role !== 'admin') {           alert("ไม่อนุญาตให้เข้าถึง: เมนูนี้สงวนสิทธิ์ไว้สำหรับผู้ดูแลระบบเท่านั้น");           return;         }       }        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));       document.getElementById(tabId).classList.remove('hidden');        document.querySelectorAll('.menu-btn').forEach(btn => {         btn.classList.remove('bg-emerald-50', 'text-emerald-700');         btn.classList.add('text-gray-600');       });       const activeBtn = document.getElementById(`btn-${tabId}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-emerald-50', 'text-emerald-700');
-        activeBtn.classList.remove('text-gray-600');
+        document.getElementById('tableHeaderTitle').innerText = `ประวัติการบริจาคของคุณ (${currentUser.fullName})`;
+        document.getElementById('labelTabTotal').innerText = "ประวัติการบริจาคของฉัน";
+        switchTab('tab-total');
       }
+
+      listenToDatabase();
     }
+
+    function logout() {
+      recordsRef.off('value');
+      currentUser = null;
+      clearSession();
+
+      document.getElementById('mainAppContainer').classList.add('hidden');
+      document.getElementById('landingPage').classList.remove('hidden');
+      document.getElementById('loginForm').reset();
+      
+      document.getElementById('loginNavBtn').classList.remove('hidden');
+      document.getElementById('userProfileNavBtn').classList.add('hidden');
+    }
+
+      function switchTab(tabId) {
+       // 1. กำหนดรายชื่อ ID ของเมนูที่อนุญาตให้เฉพาะแอดมินเข้าถึง
+        const adminTabs = ['tab-form', 'tab-top5', 'tab-charts', 'tab-settings', 'tab-split'];
+  
+       // 2. ตรวจสอบว่าถ้าแท็บที่กดเป็นแท็บของแอดมิน ผู้ใช้คนปัจจุบันเป็นแอดมินหรือไม่
+        if (adminTabs.includes(tabId)) {
+        if (!currentUser || currentUser.role !== 'admin') {
+        alert("ไม่อนุญาตให้เข้าถึง: เมนูนี้สงวนสิทธิ์ไว้สำหรับผู้ดูแลระบบเท่านั้น");
+        return; // หยุดการทำงาน ไม่ให้เปลี่ยนแท็บ
+    }
+  }
+
+  // --- โค้ดเดิมของการเปลี่ยนแท็บ ---
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById(tabId).classList.remove('hidden');
+
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+    btn.classList.add('text-gray-600');
+  });
+  const activeBtn = document.getElementById(`btn-${tabId}`);
+  if (activeBtn) {
+    activeBtn.classList.add('bg-emerald-50', 'text-emerald-700');
+    activeBtn.classList.remove('text-gray-600');
+  }
+}
 
     settingsRef.on('value', snap => {
       if (snap.exists()) {
@@ -1205,7 +1287,54 @@
 
           if (!hasValidReceiver && keywords.length > 0) {
             slipStatus = "invalid_receiver";
-            errorMessage = `❌ ตรวจไม่พบชื่อบัญชีผู้รับ (${systemSettings.receiverKeywords}) บนรูปสลิปนี้! ระบบจะไม่บันทึกข้อมูลลงฐานข้อมูล`;           }         }          const now = new Date();         const timeStr = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH', {hour: '2-digit', minute: '2-digit'});          const recordPayload = {           timestamp: now.toISOString(),           timeStr: timeStr,           txnRef: document.getElementById('txnRef').value,           donorName: document.getElementById('donorName').value.trim(),           amount: parseFloat(document.getElementById('amount').value) \vert{}\vert{} 0,           personType: document.getElementById('personType').value,           channel: document.getElementById('channel').value,           phone: document.getElementById('phoneNumber').value.trim(),           taxId: document.getElementById('taxId').value.trim(),           email: document.getElementById('email').value.trim(),           address: document.getElementById('address').value.trim(),           purpose: document.getElementById('purpose').value.trim() \vert{}\vert{} systemSettings.defaultPurpose,           slipHash: fileHash,           slipStatus: slipStatus         };          if (GOOGLE_SCRIPT_WEBAPP_URL.includes('script.google.com')) {           statusLabel.innerText = "📡 กำลังส่งข้อมูลและแจ้งเตือนไปยังระบบ...";           const base64Data = await fileToBase64(file);           const response = await fetch(GOOGLE_SCRIPT_WEBAPP_URL, {             method: 'POST',             body: JSON.stringify({               ...recordPayload,               fileName: `slip_${recordPayload.txnRef}_${file.name}`,               fileType: file.type,               base64Data: base64Data             })           });           const res = await response.json();           recordPayload.slipUrl = res.fileUrl \vert{}\vert{} "";         }          if (slipStatus !== 'valid') {           alert(errorMessage + "\n\n(ระบบได้ส่งแจ้งเตือนสถานะความผิดปกติไปยัง Discord ให้เจ้าหน้าที่แล้ว)");           statusLabel.innerText = errorMessage;           return;         }          await recordsRef.push(recordPayload);         alert(`✅ บันทึกข้อมูลและสลิปสำเร็จเรียบร้อย! ส่งแจ้งเตือนลง Discord เรียบร้อยแล้ว (REF: ${recordPayload.txnRef})`);
+            errorMessage = `❌ ตรวจไม่พบชื่อบัญชีผู้รับ (${systemSettings.receiverKeywords}) บนรูปสลิปนี้! ระบบจะไม่บันทึกข้อมูลลงฐานข้อมูล`;
+          }
+        }
+
+        const now = new Date();
+        const timeStr = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH', {hour: '2-digit', minute: '2-digit'});
+
+        const recordPayload = {
+          timestamp: now.toISOString(),
+          timeStr: timeStr,
+          txnRef: document.getElementById('txnRef').value,
+          donorName: document.getElementById('donorName').value.trim(),
+          amount: parseFloat(document.getElementById('amount').value) || 0,
+          personType: document.getElementById('personType').value,
+          channel: document.getElementById('channel').value,
+          phone: document.getElementById('phoneNumber').value.trim(),
+          taxId: document.getElementById('taxId').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          purpose: document.getElementById('purpose').value.trim() || systemSettings.defaultPurpose,
+          slipHash: fileHash,
+          slipStatus: slipStatus
+        };
+
+        if (GOOGLE_SCRIPT_WEBAPP_URL.includes('script.google.com')) {
+          statusLabel.innerText = "📡 กำลังส่งข้อมูลและแจ้งเตือนไปยังระบบ...";
+          const base64Data = await fileToBase64(file);
+          const response = await fetch(GOOGLE_SCRIPT_WEBAPP_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+              ...recordPayload,
+              fileName: `slip_${recordPayload.txnRef}_${file.name}`,
+              fileType: file.type,
+              base64Data: base64Data
+            })
+          });
+          const res = await response.json();
+          recordPayload.slipUrl = res.fileUrl || "";
+        }
+
+        if (slipStatus !== 'valid') {
+          alert(errorMessage + "\n\n(ระบบได้ส่งแจ้งเตือนสถานะความผิดปกติไปยัง Discord ให้เจ้าหน้าที่แล้ว)");
+          statusLabel.innerText = errorMessage;
+          return;
+        }
+
+        await recordsRef.push(recordPayload);
+        alert(`✅ บันทึกข้อมูลและสลิปสำเร็จเรียบร้อย! ส่งแจ้งเตือนลง Discord เรียบร้อยแล้ว (REF: ${recordPayload.txnRef})`);
         document.getElementById('donationForm').reset();
         statusLabel.innerText = "";
         switchTab('tab-total');
@@ -1374,8 +1503,8 @@
         type: 'doughnut',
         data: {
           labels: [
-            `Online (${onlineSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ -${onlinePct}%)`,
-            `Offline (${offlineSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ -${offlinePct}%)`
+            `Online (${onlineSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ - ${onlinePct}%)`,
+            `Offline (${offlineSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ - ${offlinePct}%)`
           ],
           datasets: [{ data: [onlineSum, offlineSum], backgroundColor: ['#38bdf8', '#0284c7'] }]
         },
@@ -1392,8 +1521,8 @@
         type: 'doughnut',
         data: {
           labels: [
-            `นิติบุคคล (${juristicSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ -${juristicPct}%)`,
-            `บุคคลธรรมดา (${personSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ -${personPct}%)`
+            `นิติบุคคล (${juristicSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ - ${juristicPct}%)`,
+            `บุคคลธรรมดา (${personSum.toLocaleString('th-TH', {minimumFractionDigits: 2})} ฿ - ${personPct}%)`
           ],
           datasets: [{ data: [juristicSum, personSum], backgroundColor: ['#0284c7', '#bae6fd'] }]
         },
@@ -1502,8 +1631,9 @@
       window.print();
     }
 
+    // ==================== SPLIT DONATION (แยกยอดบริจาค) ====================
     let splitRowCount = 0;
-    let parentSlipData = null;
+    let parentSlipData = null; // ข้อมูลสลิปแม่ที่ดึงมาจาก Firebase (ชีต Folk Request)
 
     function escapeHtml(str) {
       return String(str ?? '').replace(/[&<>"']/g, (m) => ({
@@ -1515,6 +1645,7 @@
       return String(key).replace(/[.#$\[\]\/]/g, '_');
     }
 
+    // ---------- ดึงข้อมูลสลิปแม่จาก Firebase (donations/<txnRef>) ซึ่งซิงก์มาจากชีต Folk Request ----------
     async function fetchParentSlipData() {
       const ref = document.getElementById('parentTranRef').value.trim();
       const errorEl = document.getElementById('parentInfoError');
@@ -1630,9 +1761,11 @@
       return total;
     }
 
+    // ---------- ตรวจสอบยอดรวมรายการย่อย เทียบกับยอดเงินสลิปแม่ (ดึงจาก Firebase) ----------
     function checkSplitTotalMatch() {
       const statusEl = document.getElementById('splitMatchStatus');
 
+      // ยังไม่ได้ดึงข้อมูลสลิปแม่สำเร็จ -> ไม่แสดงสถานะ
       if (!parentSlipData) {
         statusEl.classList.add('hidden');
         return;
@@ -1660,6 +1793,7 @@
       }
     }
 
+    // ---------- นำเข้าไฟล์ CSV / XLSX ----------
     function handleImportFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1672,6 +1806,7 @@
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: '' });
 
+          // ข้ามแถวหัวตาราง (แถวที่ 1 / index 0)
           const dataRows = rows.slice(1).filter(r => r && r.some(cell => String(cell).trim() !== ''));
 
           if (dataRows.length === 0) {
@@ -1702,6 +1837,7 @@
       reader.readAsArrayBuffer(file);
     }
 
+    // ---------- ประมวลผลรายการ + เตรียมข้อมูลใบเสร็จ ----------
     let splitReceipts = [];
 
     function processSplitForm() {
@@ -1778,6 +1914,7 @@
       openReceiptModal();
     }
 
+    // ---------- Popup รายการใบเสร็จ ----------
     function buildReceiptPreviewCard(receipt, index) {
       return `
         <div class="border border-dashed border-gray-300 rounded-xl p-5 bg-gray-50">
@@ -1791,15 +1928,152 @@
             </button>
           </div>
           <div class="grid grid-cols-2 gap-y-1.5 text-xs text-gray-700">
-            <span class="text-gray-500">เลขที่อการปรับแก้ตามที่คุณต้องการอ้างอิงจากรูป `image_4dc04d.png` ผมได้เพิ่มคำว่า **"/ ประวัติ"** ต่อท้ายชื่อระบบในส่วนของ Header หลักและส่วนของ Sidebar (แผงควบคุมหลังบ้าน) ให้เรียบร้อยครับ
-
-ส่วนเรื่อง **การจำกัดสิทธิ์หน้า Split และหน้าอื่นๆ** (ยกเว้นหน้ายอดรวม/ประวัติ) ผมได้ตรวจสอบโค้ดให้แล้ว พบว่าโค้ดหลักของคุณ **เขียนป้องกันไว้สมบูรณ์แล้วครับ**[cite: 1] โดยมีการใช้คลาส `.admin-only` เพื่อซ่อนปุ่มเมนู และมีการดักจับในฟังก์ชัน `switchTab` อย่างรัดกุมผ่านตัวแปร `adminTabs` ทำให้ผู้ใช้ทั่วไป (Member) ไม่สามารถเข้าถึงหน้าอื่นๆ ได้นอกจากหน้าประวัติส่วนบุคคล (`tab-total`) ครับ
-
-คุณสามารถนำโค้ด 2 ส่วนนี้ไปแทนที่ในโค้ดหลักได้เลยครับ:
-
-**1. แก้ไขส่วน Header ของหน้า Landing Page (ค้นหาและแทนที่โค้ดเดิม)**
-```html
-          <div class="border-l border-gray-300 pl-3">
-            <span class="font-extrabold text-gray-900 text-base block leading-tight">กองทุนบริจาค / ประวัติ</span>
-            <span class="text-xs text-gray-500 font-medium">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</span>
+            <span class="text-gray-500">เลขที่อ้างอิง (Sub Ref)</span>
+            <span class="font-mono text-right text-indigo-700">${escapeHtml(receipt.ref)}</span>
+            <span class="text-gray-500">Child TXN</span>
+            <span class="font-mono text-right">${escapeHtml(receipt.childTxnNum)}</span>
+            <span class="text-gray-500">ชื่อผู้บริจาค</span>
+            <span class="text-right font-semibold">${escapeHtml(receipt.name)}</span>
+            ${receipt.taxId ? `<span class="text-gray-500">เลขประจำตัว 13 หลัก</span><span class="font-mono text-right">${escapeHtml(receipt.taxId)}</span>` : ''}
+            <span class="text-gray-500">วันที่ออกใบเสร็จ</span>
+            <span class="text-right">${escapeHtml(receipt.date)} ${escapeHtml(receipt.time)} น.</span>
           </div>
+          <div class="mt-3 pt-3 border-t border-gray-200 flex justify-between items-center">
+            <span class="text-xs font-semibold text-gray-600">ยอดเงินบริจาค</span>
+            <span class="text-base font-bold text-emerald-600">${escapeHtml(receipt.amountText)} บาท</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function openReceiptModal() {
+      const container = document.getElementById('receiptListContainer');
+      container.innerHTML = splitReceipts.map((r, i) => buildReceiptPreviewCard(r, i)).join('');
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    document.getElementById('receiptModal').addEventListener('click', (e) => {
+      if (e.target.id === 'receiptModal') closeReceiptModal();
+    });
+
+    // ---------- สร้างใบเสร็จรูปแบบทางการ (เหมือน PART 4) แล้วแปลงเป็น PDF ----------
+    function buildOfficialReceiptHTML(data) {
+      return `
+        <div class="text-center mb-6">
+          <div class="flex justify-center mb-1">
+            <img src="https://i.ibb.co/3mfxw0Jc/Screenshot-2026-09-01-232358.png" alt="โลโก้มูลนิธิโรงพยาบาลเกษตรศาสตร์" class="h-32 w-auto object-contain">
+          </div>
+          <h1 class="text-2xl font-bold mt-2 text-gray-900 tracking-wider">ใบรับบริจาค / ใบอนุโมทนา</h1>
+          <div class="w-full border-b-2 border-gray-800 mt-2"></div>
+        </div>
+        <div class="flex justify-between items-start text-sm leading-relaxed mb-6">
+          <div>
+            <h2 class="font-bold text-base text-gray-900">โรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์</h2>
+            <p class="text-xs text-gray-600">มหาวิทยาลัยเกษตรศาสตร์ เลขที่ 50 ถนนงามวงศ์วาน แขวงลาดยาว เขตจตุจักร<br>กรุงเทพมหานคร 10900, Bangkok, Thailand, 10900</p>
+            <p class="text-xs text-gray-600 mt-1">เลขที่หน่วยรับบริจาค: <span class="font-mono">XXXXXXXXXXXX</span></p>
+          </div>
+          <div class="text-right">
+            <p><strong>เลขที่อ้างอิง:</strong> <span class="font-mono font-bold">${escapeHtml(data.ref)}</span></p>
+            <p><strong>วันที่:</strong> ${escapeHtml(data.date)}</p>
+            <p><strong>เวลา:</strong> ${escapeHtml(data.time)} น.</p>
+          </div>
+        </div>
+        <div class="space-y-4 text-sm mt-6">
+          <div class="flex justify-between">
+            <p class="w-1/2"><strong>ชื่อผู้บริจาค:</strong> <span class="font-semibold">${escapeHtml(data.name)}</span></p>
+            <p class="w-1/2"><strong>เลขประจำตัวผู้เสียภาษีอากร/บัตรประชาชน:</strong> <span class="font-mono">${escapeHtml(data.taxId || '-')}</span></p>
+          </div>
+          <div class="flex justify-between">
+            <p class="w-full"><strong>ที่อยู่:</strong> ${escapeHtml(data.address || '-')}</p>
+          </div>
+          <div class="pt-2">
+            <p><strong>บริจาคเงินเพื่อ:</strong> <span class="border-b border-dotted border-gray-500 pb-1 inline-block w-3/4">${escapeHtml(data.purpose)}</span></p>
+          </div>
+          <div class="text-center py-5 space-y-1">
+            <p class="text-base">จำนวนเงิน: <span class="text-xl font-bold px-2">${escapeHtml(data.amountText)}</span> บาท</p>
+            <p class="text-gray-700">( <span class="font-semibold">${escapeHtml(data.amountThai)}</span> )</p>
+          </div>
+        </div>
+      `;
+    }
+
+    async function renderReceiptCanvas(data) {
+      const box = document.getElementById('splitReceiptRenderBox');
+      box.innerHTML = buildOfficialReceiptHTML(data);
+
+      const imgs = box.querySelectorAll('img');
+      await Promise.all(Array.from(imgs).map(img => img.complete
+        ? Promise.resolve()
+        : new Promise(res => { img.onload = res; img.onerror = res; })));
+
+      return await html2canvas(box, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    }
+
+    async function receiptCanvasToPdfBlob(canvas) {
+      const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = (canvas.height * pageWidth) / canvas.width;
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pageWidth, pageHeight);
+      return pdf;
+    }
+
+    async function downloadSplitReceipt(index) {
+      const data = splitReceipts[index];
+      if (!data) return;
+      try {
+        const canvas = await renderReceiptCanvas(data);
+        const pdf = await receiptCanvasToPdfBlob(canvas);
+        pdf.save(`${data.ref}.pdf`);
+      } catch (err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการสร้าง PDF');
+      }
+    }
+
+    async function downloadAllSplitReceiptsZip() {
+      if (splitReceipts.length === 0) {
+        alert('ไม่มีรายการใบเสร็จให้ดาวน์โหลด');
+        return;
+      }
+      let zipName = document.getElementById('zipFileName').value.trim();
+      if (!zipName) zipName = 'มาซาลา';
+
+      const btn = document.getElementById('downloadAllZipBtn');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerText = '⏳ กำลังสร้างไฟล์...';
+
+      try {
+        const zip = new JSZip();
+        for (const data of splitReceipts) {
+          const canvas = await renderReceiptCanvas(data);
+          const pdf = await receiptCanvasToPdfBlob(canvas);
+          const blob = pdf.output('blob');
+          zip.file(`${data.ref}.pdf`, blob);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${zipName}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการสร้างไฟล์ ZIP');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    }
+
+    restoreSession();
+  </script>
+</body>
+</html>
