@@ -1092,20 +1092,32 @@
       document.getElementById('userProfileNavBtn').classList.add('hidden');
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tabId).classList.remove('hidden');
-
-      document.querySelectorAll('.menu-btn').forEach(btn => {
-        btn.classList.remove('bg-emerald-50', 'text-emerald-700');
-        btn.classList.add('text-gray-600');
-      });
-      const activeBtn = document.getElementById(`btn-${tabId}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-emerald-50', 'text-emerald-700');
-        activeBtn.classList.remove('text-gray-600');
-      }
+      function switchTab(tabId) {
+       // 1. กำหนดรายชื่อ ID ของเมนูที่อนุญาตให้เฉพาะแอดมินเข้าถึง
+        const adminTabs = ['tab-form', 'tab-top5', 'tab-charts', 'tab-settings', 'tab-split'];
+  
+       // 2. ตรวจสอบว่าถ้าแท็บที่กดเป็นแท็บของแอดมิน ผู้ใช้คนปัจจุบันเป็นแอดมินหรือไม่
+        if (adminTabs.includes(tabId)) {
+        if (!currentUser || currentUser.role !== 'admin') {
+        alert("ไม่อนุญาตให้เข้าถึง: เมนูนี้สงวนสิทธิ์ไว้สำหรับผู้ดูแลระบบเท่านั้น");
+        return; // หยุดการทำงาน ไม่ให้เปลี่ยนแท็บ
     }
+  }
+
+  // --- โค้ดเดิมของการเปลี่ยนแท็บ ---
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+  document.getElementById(tabId).classList.remove('hidden');
+
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+    btn.classList.add('text-gray-600');
+  });
+  const activeBtn = document.getElementById(`btn-${tabId}`);
+  if (activeBtn) {
+    activeBtn.classList.add('bg-emerald-50', 'text-emerald-700');
+    activeBtn.classList.remove('text-gray-600');
+  }
+}
 
     settingsRef.on('value', snap => {
       if (snap.exists()) {
