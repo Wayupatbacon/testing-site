@@ -666,24 +666,39 @@
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
           <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-3">ระบบแยกยอดบริจาค (Split Donation)</h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2 bg-gray-50 p-4 rounded-xl border border-gray-100">
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">เลข Transaction สลิปแม่ (Parent Ref)</label>
-              <input type="text" id="parentTranRef" placeholder="เช่น TXN-000123" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-2">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">เลข Transaction สลิปแม่ (Parent Ref)</label>
+            <div class="flex gap-2">
+              <input type="text" id="parentTranRef" placeholder="เช่น TXN-000058" oninput="parentSlipData=null; document.getElementById('parentInfoCard').classList.add('hidden'); document.getElementById('parentInfoError').classList.add('hidden'); checkSplitTotalMatch();" onkeydown="if(event.key==='Enter'){event.preventDefault();fetchParentSlipData();}" class="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none font-mono">
+              <button type="button" id="parentSearchBtn" onclick="fetchParentSlipData()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-lg shadow-sm transition whitespace-nowrap">
+                🔍 ดึงข้อมูล
+              </button>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">ยอดเงินสลิปแม่ (บาท)</label>
-              <input type="number" step="0.01" id="parentTotalAmount" oninput="checkSplitTotalMatch()" placeholder="เช่น 10000.00" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none text-right font-mono">
+            <p class="text-[11px] text-gray-400 mt-1">ระบบจะดึงข้อมูลจากชีต "Folk Request" ที่ซิงก์ไว้บน Firebase โดยอัตโนมัติด้วยเลขอ้างอิงนี้</p>
+
+            <p id="parentInfoError" class="hidden mt-2 text-xs font-semibold text-red-600">-</p>
+
+            <div id="parentInfoCard" class="hidden mt-3 bg-white border border-emerald-200 rounded-xl p-4 text-xs text-gray-700 space-y-1.5">
+              <div class="flex justify-between items-center mb-1 pb-1 border-b border-gray-100">
+                <span class="font-bold text-emerald-700 text-sm">✅ พบข้อมูลสลิปแม่</span>
+              </div>
+              <div class="grid grid-cols-2 gap-y-1">
+                <span class="text-gray-500">ชื่อผู้บริจาค</span><span class="text-right font-semibold" id="pi-name">-</span>
+                <span class="text-gray-500">ยอดเงิน</span><span class="text-right font-bold text-emerald-700" id="pi-amount">-</span>
+                <span class="text-gray-500">ช่องทาง</span><span class="text-right" id="pi-channel">-</span>
+                <span class="text-gray-500">ประเภทบุคคล</span><span class="text-right" id="pi-personType">-</span>
+                <span class="text-gray-500">เลขประจำตัว 13 หลัก</span><span class="text-right font-mono" id="pi-taxId">-</span>
+                <span class="text-gray-500">ที่อยู่</span><span class="text-right" id="pi-address">-</span>
+                <span class="text-gray-500">วัตถุประสงค์</span><span class="text-right" id="pi-purpose">-</span>
+              </div>
+              <a id="pi-slipLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-block mt-2 text-indigo-600 hover:text-indigo-800 font-semibold underline">🧾 ดูรูปสลิปแม่</a>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-600 mb-1">อัปโหลดไฟล์สลิปแม่ (ภาพรวม)</label>
-              <input type="file" id="parentSlipFile" accept="image/*" class="w-full px-3 py-1.5 border rounded-lg text-sm bg-white file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 outline-none">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-gray-600 mb-1">นำเข้ารายชื่อจากไฟล์ (.csv / .xlsx)</label>
-              <input type="file" id="importFile" accept=".csv,.xlsx,.xls" onchange="handleImportFile(event)" class="w-full px-3 py-1.5 border rounded-lg text-sm bg-white file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 outline-none">
-              <p class="text-[11px] text-gray-400 mt-1">ลำดับคอลัมน์ในไฟล์: ชื่อ-นามสกุล / เลขประจำตัว 13 หลัก / ยอดเงิน — ระบบจะข้ามแถวแรก (หัวตาราง) โดยอัตโนมัติ</p>
-            </div>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 mb-2">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">นำเข้ารายชื่อจากไฟล์ (.csv / .xlsx)</label>
+            <input type="file" id="importFile" accept=".csv,.xlsx,.xls" onchange="handleImportFile(event)" class="w-full px-3 py-1.5 border rounded-lg text-sm bg-white file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 outline-none">
+            <p class="text-[11px] text-gray-400 mt-1">ลำดับคอลัมน์ในไฟล์: ชื่อ-นามสกุล / เลขประจำตัว 13 หลัก / ยอดเงิน — ระบบจะข้ามแถวแรก (หัวตาราง) โดยอัตโนมัติ</p>
           </div>
 
           <div id="splitMatchStatus" class="hidden mb-6 px-4 py-2.5 rounded-xl text-sm font-bold text-center border"></div>
@@ -1606,11 +1621,80 @@
 
     // ==================== SPLIT DONATION (แยกยอดบริจาค) ====================
     let splitRowCount = 0;
+    let parentSlipData = null; // ข้อมูลสลิปแม่ที่ดึงมาจาก Firebase (ชีต Folk Request)
 
     function escapeHtml(str) {
       return String(str ?? '').replace(/[&<>"']/g, (m) => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
       }[m]));
+    }
+
+    function sanitizeFirebaseKey(key) {
+      return String(key).replace(/[.#$\[\]\/]/g, '_');
+    }
+
+    // ---------- ดึงข้อมูลสลิปแม่จาก Firebase (donations/<txnRef>) ซึ่งซิงก์มาจากชีต Folk Request ----------
+    async function fetchParentSlipData() {
+      const ref = document.getElementById('parentTranRef').value.trim();
+      const errorEl = document.getElementById('parentInfoError');
+      const infoCard = document.getElementById('parentInfoCard');
+      const searchBtn = document.getElementById('parentSearchBtn');
+
+      errorEl.classList.add('hidden');
+      infoCard.classList.add('hidden');
+      parentSlipData = null;
+
+      if (!ref) {
+        errorEl.innerText = 'กรุณากรอกเลข Transaction สลิปแม่ก่อนกดดึงข้อมูล';
+        errorEl.classList.remove('hidden');
+        checkSplitTotalMatch();
+        return;
+      }
+
+      const key = sanitizeFirebaseKey(ref);
+      const originalBtnText = searchBtn.innerHTML;
+      searchBtn.disabled = true;
+      searchBtn.innerText = '⏳ กำลังค้นหา...';
+
+      try {
+        const snap = await db.ref('donations/' + key).once('value');
+
+        if (!snap.exists()) {
+          errorEl.innerText = `ไม่พบข้อมูล Transaction "${ref}" ในระบบ กรุณาตรวจสอบเลขอ้างอิงอีกครั้ง`;
+          errorEl.classList.remove('hidden');
+          checkSplitTotalMatch();
+          return;
+        }
+
+        const data = snap.val();
+        parentSlipData = data;
+
+        document.getElementById('pi-name').innerText = data.donorName || '-';
+        document.getElementById('pi-amount').innerText = (Number(data.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' บาท';
+        document.getElementById('pi-channel').innerText = data.channel || '-';
+        document.getElementById('pi-personType').innerText = data.personType || '-';
+        document.getElementById('pi-taxId').innerText = data.taxId || '-';
+        document.getElementById('pi-address').innerText = data.address || '-';
+        document.getElementById('pi-purpose').innerText = data.purpose || '-';
+
+        const slipLinkEl = document.getElementById('pi-slipLink');
+        if (data.slipUrl) {
+          slipLinkEl.href = data.slipUrl;
+          slipLinkEl.classList.remove('hidden');
+        } else {
+          slipLinkEl.classList.add('hidden');
+        }
+
+        infoCard.classList.remove('hidden');
+        checkSplitTotalMatch();
+      } catch (err) {
+        console.error(err);
+        errorEl.innerText = 'เกิดข้อผิดพลาดในการดึงข้อมูลจาก Firebase กรุณาลองใหม่อีกครั้ง';
+        errorEl.classList.remove('hidden');
+      } finally {
+        searchBtn.disabled = false;
+        searchBtn.innerHTML = originalBtnText;
+      }
     }
 
     function addSplitRow(prefill = {}) {
@@ -1665,17 +1749,17 @@
       return total;
     }
 
-    // ---------- ตรวจสอบยอดรวมรายการย่อย เทียบกับยอดเงินสลิปแม่ ----------
+    // ---------- ตรวจสอบยอดรวมรายการย่อย เทียบกับยอดเงินสลิปแม่ (ดึงจาก Firebase) ----------
     function checkSplitTotalMatch() {
       const statusEl = document.getElementById('splitMatchStatus');
-      const parentAmountRaw = document.getElementById('parentTotalAmount').value;
-      const parentAmount = parseFloat(parentAmountRaw);
 
-      // ยังไม่ได้กรอกยอดสลิปแม่ -> ไม่แสดงสถานะ
-      if (parentAmountRaw === '' || isNaN(parentAmount)) {
+      // ยังไม่ได้ดึงข้อมูลสลิปแม่สำเร็จ -> ไม่แสดงสถานะ
+      if (!parentSlipData) {
         statusEl.classList.add('hidden');
         return;
       }
+
+      const parentAmount = Number(parentSlipData.amount) || 0;
 
       let splitTotal = 0;
       document.querySelectorAll('.split-amount').forEach(input => {
@@ -1749,6 +1833,10 @@
       const totalSplitAmount = calculateSplitTotal();
       const rows = document.querySelectorAll('#splitInputBody tr');
 
+      if (!parentSlipData) {
+        alert('กรุณากดปุ่ม "🔍 ดึงข้อมูล" เพื่อดึงข้อมูลสลิปแม่จากระบบก่อนทำรายการ');
+        return;
+      }
       if (rows.length === 0) {
         alert("กรุณาเพิ่มรายการแจกแจงยอดอย่างน้อย 1 รายการ");
         return;
@@ -1758,7 +1846,7 @@
         return;
       }
 
-      const parentTxnNum = "TXN-" + String(Math.floor(Math.random() * 900000) + 100000);
+      const parentTxnNum = parentSlipData.txnRef || parentRef;
       const now = new Date();
       const dateStr = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
       const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1795,8 +1883,8 @@
           time: timeStr,
           name,
           taxId,
-          address: '-',
-          purpose: systemSettings.defaultPurpose || 'สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์',
+          address: parentSlipData.address || '-',
+          purpose: parentSlipData.purpose || systemSettings.defaultPurpose || 'สนับสนุนโรงพยาบาลมหาวิทยาลัยเกษตรศาสตร์',
           amountText: amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }),
           amountThai: thaiBahtText(amount)
         });
